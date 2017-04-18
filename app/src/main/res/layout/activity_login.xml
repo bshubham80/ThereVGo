@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    tools:context="com.android.therevgo.activities.LoginActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/logo"
+            android:transitionName="@string/logo"
+            tools:targetApi="lollipop"
+            android:contentDescription="@string/icon_description" />
+
+
+        <LinearLayout
+            android:alpha="0"
+            android:layout_centerInParent="true"
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/activity_vertical_margin">
+
+            <com.android.therevgo.customviews.CustomEditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                android:hint="@string/hint_email"
+                android:background="@drawable/editbox"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="20dp"
+                tools:targetApi="lollipop" />
+
+
+            <com.android.therevgo.customviews.CustomEditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/editbox"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword" />
+
+            <com.android.therevgo.customviews.CustomButton
+                android:id="@+id/btn_login"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/white"/>
+
+            <com.android.therevgo.customviews.CustomTextView
+                android:id="@+id/forgot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:contextClickable="true"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/mini_padding"
+                android:text="@string/forgot_password" />
+
+            <Button
+                android:id="@+id/create_Account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@null"
+                android:padding="@dimen/mini_padding"
+                android:text="@string/not_account_yet"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
+

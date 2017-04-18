@@ -1,0 +1,59 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.therevgo.fragments.listing.BusinessListViewFragment">
+
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:id="@+id/customTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:textAllCaps="true"
+            android:text="@string/business_empty_list" />
+
+        <com.android.therevgo.customviews.CustomButton
+            android:id="@+id/customButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/action_create"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_below="@+id/customTextView"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:background="@drawable/background_button_primary"/>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/business_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <ListView
+        android:id="@+id/business_profile_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:tint="#FFF"/>
+
+</RelativeLayout>

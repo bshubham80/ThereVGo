@@ -1,0 +1,48 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.therevgo.fragments.listing.BusinessListingFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/default_listing_text"
+        android:background="@android:color/background_dark"
+        android:layout_gravity="top"
+        android:padding="@dimen/activity_vertical_margin"
+        android:elevation="2dp"
+        android:layout_marginBottom="@dimen/activity_card_margin"
+        tools:targetApi="lollipop">
+
+        <TextView
+            android:text="@string/listing"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView5"
+            android:textColor="@android:color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_below="@+id/textView5"
+            android:text="@string/fragment_listing_description" />
+
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/grid_view"
+        android:layout_below="@id/default_listing_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="3"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="10dp"
+        android:stretchMode="columnWidth" />
+
+</RelativeLayout>

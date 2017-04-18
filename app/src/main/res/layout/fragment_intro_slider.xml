@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center"
+    tools:context="com.android.therevgo.activities.IntroSlider$PlaceholderFragment">
+
+    <com.android.therevgo.customviews.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:id="@+id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="@dimen/activity_card_margin"
+        android:text="@string/welcome_to_therevgo"/>
+
+    <ImageView
+        android:id="@+id/section_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/icon_description"
+        android:layout_below="@id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"/>
+
+    <com.android.therevgo.customviews.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:id="@+id/section_text"
+        android:layout_marginTop="@dimen/activity_card_margin"
+        android:layout_below="@id/section_label"
+        android:textColor="@android:color/white"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

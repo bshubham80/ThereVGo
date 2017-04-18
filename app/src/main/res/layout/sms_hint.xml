@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <TextView
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Message Category"
+            android:id="@+id/msgcategory"
+            android:gravity="left|center"
+            android:layout_margin="@dimen/mini_padding"
+            android:background="@drawable/bottom_border"
+            android:drawableRight="@drawable/ic_down" />
+
+        <TextView
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/message_type"
+            android:background="@drawable/bottom_border"
+            android:id="@+id/msgType"
+            android:gravity="left|center"
+            android:layout_margin="@dimen/mini_padding"
+            android:layout_marginTop="8dp"
+            android:drawableRight="@drawable/ic_down"/>
+
+        <TextView
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/message_type"
+            android:background="@drawable/bottom_border"
+            android:id="@+id/msgSubType"
+            android:gravity="left|center"
+            android:layout_margin="@dimen/mini_padding"
+            android:layout_marginTop="8dp"
+            android:drawableRight="@drawable/ic_down"/>
+
+        <Button
+            android:id="@+id/btn_search_sms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/msgList"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>

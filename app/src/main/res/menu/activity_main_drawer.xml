@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/nav_show_follow_up"
+            android:icon="@drawable/ic_menu_business"
+            android:title="Show Follow Up" />
+        <item
+            android:id="@+id/nav_create_follow_up"
+            android:icon="@drawable/ic_menu_add"
+            android:title="Create Follow Up" />
+        <item
+            android:id="@+id/nav_send_sms"
+            android:icon="@drawable/ic_menu_message"
+            android:title="Send SMS" />
+        <item
+            android:id="@+id/nav_business_support"
+            android:visible="false"
+            android:icon="@drawable/ic_menu_supervisor"
+            android:title="Business Support" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_call"
+                android:icon="@drawable/ic_menu_call_black"
+                android:title="Call Us" />
+            <item
+                android:id="@+id/nav_aboutus"
+                android:icon="@drawable/ic_menu_assignment"
+                android:title="About Us" />
+            <item
+                android:id="@+id/nav_privacy"
+                android:icon="@drawable/ic_menu_assistant"
+                android:title="Privacy Policy" />
+            <item
+                android:id="@+id/nav_terms"
+                android:icon="@drawable/ic_menu_assistant_photo"
+                android:title="Terms of Use" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Logout" />
+        </menu>
+    </item>
+
+</menu>

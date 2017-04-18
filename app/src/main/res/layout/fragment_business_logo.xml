@@ -1,0 +1,60 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_card_margin"
+    tools:context="com.android.therevgo.fragments.listing.BusinessLogoFragment">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:src="@drawable/create_account_profile"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/select_image"
+        android:layout_marginTop="@dimen/mini_padding"
+        android:layout_below="@+id/logo"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <com.android.therevgo.customviews.CustomButton
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0c9342"
+            android:textColor="@android:color/white"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/mini_padding"
+            android:layout_marginTop="@dimen/mini_padding"
+            android:layout_marginBottom="@dimen/mini_padding"
+            android:text="@string/submit"/>
+
+        <com.android.therevgo.customviews.CustomButton
+            android:id="@+id/btn_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0c9342"
+            android:background="@android:color/white"
+            android:layout_toLeftOf="@+id/btn_submit"
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/mini_padding"
+            android:layout_marginTop="@dimen/mini_padding"
+            android:layout_marginBottom="@dimen/mini_padding"
+            android:text="@string/update"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

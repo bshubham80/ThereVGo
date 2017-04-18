@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:elevation="2dp"
+    android:background="@drawable/selelocter"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:targetApi="lollipop">
+
+    <com.android.therevgo.customviews.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_orange_dark"
+        android:id="@+id/follow_name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_blue_dark"
+            android:id="@+id/follow_email"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal" />
+
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_red_dark"
+            android:id="@+id/follow_phone"
+            android:layout_weight="2"
+            android:gravity="right" />
+
+    </LinearLayout>
+
+    <com.android.therevgo.customviews.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/follow_description"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/follow_date"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal" />
+
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/follow_area"
+            android:layout_weight="1"
+            android:gravity="right" />
+
+        <com.android.therevgo.customviews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/follow_city"
+            android:layout_weight="1"
+            android:gravity="right"/>
+
+    </LinearLayout>
+
+</LinearLayout>

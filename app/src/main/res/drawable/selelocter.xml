@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:drawable="@color/selection_color"
+        android:state_activated="true"
+        tools:targetApi="honeycomb" />
+
+    <item android:drawable="@android:color/white" />
+
+</selector>
