@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -252,6 +253,11 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
 
 
         final EditText edittext = new EditText(context);
+
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(20);
+        edittext.setFilters(FilterArray);
+
         edittext.setLayoutParams(params);
         edittext.setPadding(10,10,10,10);
 
@@ -266,20 +272,23 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
                 //What ever you want to do with the value
                 String dealsName = edittext.getText().toString();
 
-                mUpdateText = dealsName;
-                mSelectedIndex = position;
-                dialog.dismiss();
+                String reg = "[a-zA-Z ]+";
+                if (!utils.validateString(dealsName, reg)) {
+                    edittext.setError("Keyword should contain alphanumeric value only");
+                    return ;
+                } else {
 
-                /**
-                 * http://tapi.therevgo.in/api/BussListingDealsUpd/BUSDealsUPD?userid=1&deal_name=radff&con_id=25&id=74
-                 */
-                String url =  "http://tapi.therevgo.in/api/BussListingDealsUpd/BUSDealsUPD"+
-                        "?userid="+user_id+
-                        "&deal_name="+dealsName+
-                        "&con_id="+con_id+
-                        "&id="+id;
-                url = url.replace(" ","+");
-                updateValues(url);
+                    mUpdateText = dealsName;
+                    mSelectedIndex = position;
+                    dialog.dismiss();
+                    String url =  "http://tapi.therevgo.in/api/BussListingDealsUpd/BUSDealsUPD"+
+                            "?userid="+user_id+
+                            "&deal_name="+dealsName+
+                            "&con_id="+con_id+
+                            "&id="+id;
+                    url = url.replace(" ","+");
+                    updateValues(url);
+                }
             }
         });
 

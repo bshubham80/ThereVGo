@@ -1,24 +1,30 @@
 package com.android.therevgo.fragments.listing;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.android.therevgo.activities.ContainerActivity;
 import com.android.therevgo.dto.BusinessProfileModel;
+import com.android.therevgo.dto.CountryModel;
+import com.android.therevgo.dto.StateModel;
 import com.android.therevgo.networks.HttpConnection;
 import com.android.therevgo.networks.ResponseListener;
 import com.android.therevgo.utility.PrefManager;
 import com.android.therevgo.utility.Utils;
+import com.google.gson.Gson;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -27,6 +33,7 @@ import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class BusinessContactInfoFragment extends Fragment implements ResponseListener {
@@ -34,8 +41,18 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
     public static final String TAG =  BusinessContactInfoFragment.class.getName();
     public static final String CONTACT_ID = "contact_id";
     private static final String ARG_DATA = "data";
+    private final Gson gson = new Gson();
+
+    private int clickRefernece;
+    private static final int COUNTRY = 0;
+    private static final int STATE = 1;
+
+    public String country_id, state_id ;
 
     private Context context;
+
+    private List<String> idsList;
+    private ArrayList<String> textList;
 
     private EditText follow_name,
             follow_mobile,
@@ -43,7 +60,8 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
             follow_area,
             follow_city,
             follow_pincode,
-            follow_state;
+            follow_state,
+            follow_country;
 
     private Button btn_submit, btn_update;
 
@@ -59,7 +77,6 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
     private ContainerActivity containerActivity;
 
     public static BusinessContactInfoFragment newInstance(BusinessProfileModel.ListModel model) {
-
         Bundle args = new Bundle();
         args.putSerializable(ARG_DATA, model);
         BusinessContactInfoFragment fragment = new BusinessContactInfoFragment();
@@ -84,9 +101,13 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         follow_city = (EditText) view.findViewById(R.id.et_city);
         follow_pincode = (EditText) view.findViewById(R.id.et_pincode);
         follow_state = (EditText) view.findViewById(R.id.et_state);
+        follow_country = (EditText) view.findViewById(R.id.et_country);
 
         btn_submit = (Button) view.findViewById(R.id.btn_submit);
         btn_update = (Button) view.findViewById(R.id.btn_update);
+
+        follow_state.setOnClickListener(new MyClickListener());
+        follow_country.setOnClickListener(new MyClickListener());
 
         btn_submit.setOnClickListener(new MyClickListener());
         btn_update.setOnClickListener(new MyClickListener());
@@ -100,7 +121,7 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
             BusinessProfileModel.ListModel data = (BusinessProfileModel.ListModel) bundle.getSerializable(ARG_DATA);
             if (data != null) {
                 con_id = data.con_id;
-                setValuetoViews(data);
+                setValueToViews(data);
                 btn_update.setVisibility(View.VISIBLE);
                 btn_submit.setText("SKIP");
             }
@@ -119,8 +140,6 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                 case R.id.btn_submit:
                     Button btn = (Button) v;
                     if(btn.getText().toString().equals("SKIP")) {
-                        FragmentTransaction ft = BusinessContactInfoFragment.this.getFragmentManager()
-                                                                 .beginTransaction();
                         Fragment fragment = new BusinessInfoFragment();
                         Bundle bundle = new Bundle();
                         bundle.putInt(CONTACT_ID, con_id);
@@ -140,8 +159,123 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                         updatesValues();
                     }
                 break;
+
+                case R.id.et_country:
+                    idsList = new ArrayList<>();
+                    textList = new ArrayList<>();
+                    dialog.show();
+
+                    clickRefernece = COUNTRY;
+                    state_id = null ;
+                    follow_state.setText(null);
+
+                    String u0 = "http://tapi.therevgo.in/api/Country";
+                    HttpConnection.RequestGet(u0, new ResponseListener() {
+                        @Override
+                        public void onResponse(final int statusCode, final JSONObject jsonObject) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    if (statusCode == 200) {
+                                        CountryModel model = gson.fromJson(jsonObject.toString(), CountryModel.class);
+                                        if (model.status != null && model.status) {
+                                            if (model.Data.size() > 0) {
+                                                for (CountryModel.Data data : model.Data) {
+                                                    idsList.add(data.CountryCode);
+                                                    textList.add(data.CountryName);
+                                                }
+                                                selectDropDown(containerActivity, "Select Country", follow_country, textList);
+                                            } else {
+                                                Toast.makeText(context, "No Data Found", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Unable To Connect To Server", Toast.LENGTH_SHORT).show();
+                                            //utils.showToast(containerActivity, "Unable To Connect To Server");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
+                break;
+
+                case R.id.et_state:
+                    idsList = new ArrayList<>();
+                    textList = new ArrayList<>();
+                    dialog.show();
+
+                    clickRefernece = STATE;
+
+                    String u1 = "http://tapi.therevgo.in/api/State?CountryCode="+country_id;
+                    HttpConnection.RequestGet(u1, new ResponseListener() {
+                        @Override
+                        public void onResponse(final int statusCode, final JSONObject jsonObject) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    if (statusCode == 200) {
+                                        StateModel model = gson.fromJson(jsonObject.toString(), StateModel.class);
+                                        if (model.status != null && model.status) {
+                                            if (model.Data.size() > 0) {
+                                                for (StateModel.Data data : model.Data) {
+                                                    idsList.add(String.valueOf(data.id));
+                                                    textList.add(data.ST_NAME);
+                                                }
+                                                selectDropDown(containerActivity, "Select State", follow_state, textList);
+                                            } else {
+                                                Toast.makeText(context, "No Data Found", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(context, "Unable To Connect To Server", Toast.LENGTH_SHORT).show();
+                                            //utils.showToast(containerActivity, "Unable To Connect To Server");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
+                break;
             }
         }
+    }
+
+    public void selectDropDown(Context ctx, String title, final TextView txt, final ArrayList<String> list) {
+
+        final ArrayAdapter arrayAdapter = new ArrayAdapter<>(ctx, android.R.layout.simple_list_item_1, list);
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ctx);
+        builderSingle.setTitle(title);
+
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                txt.setText(list.get(which));
+                switch (clickRefernece) {
+                    case COUNTRY:
+                        //optionID = MessageID.get(which);
+                        country_id = idsList.get(which);
+                    break;
+                    case STATE:
+                        // productID = MessageID.get(which);
+                        state_id = idsList.get(which);
+                    break;
+                }
+            }
+        });
+        builderSingle.show();
     }
 
     private boolean validateForm() {
@@ -178,6 +312,9 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         if (!utils.validateView(getActivity(), follow_state, "Enter State Name")) {
             return false;
         }
+        if (!utils.validateView(getActivity(), follow_country, "Enter Country Name")) {
+            return false;
+        }
         return true ;
     }
     private void insertValues() {
@@ -201,7 +338,7 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                 "&city="+ URLEncoder.encode(follow_city.getText().toString())+
                 "&pinncode="+ URLEncoder.encode(follow_pincode.getText().toString())+
                 "&state="+ URLEncoder.encode(follow_state.getText().toString())+
-                "&country=IN"+
+                "&country="+URLEncoder.encode(follow_country.getText().toString())+
                 "&id="+ URLEncoder.encode(con_id+"");
 
 
@@ -222,66 +359,54 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         map.add(new BasicNameValuePair("fax_no", "N/A"));
 
         map.add(new BasicNameValuePair("state", follow_state.getText().toString()));
-        map.add(new BasicNameValuePair("country", "India"));
+        map.add(new BasicNameValuePair("country", follow_country.getText().toString()));
 
         return map;
     }
 
     @Override
-    public void onResponse(int Statuscode, final JSONObject jsonObject) {
-        if (Statuscode == 200) {
-            String status = null;
+    public void onResponse(int statusCode, final JSONObject jsonObject) {
+        if (statusCode == 200) {
+            String status;
             try {
                 status = jsonObject.getString("status");
             } catch (JSONException e) {
                 e.printStackTrace();
+                status = null;
             }
             if (status != null && status.equals("true")) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
-                            if (inserting) {
-                                inserting = false;
-                                Toast.makeText(context, "Details Entered Successfully", Toast.LENGTH_SHORT).show();
-                            }
-
-                            if (updating) {
-                                updating = false ;
-                               /* if (BusinessProfile2.instance != null) {
-                                    BusinessProfile2.instance.startNetwork();
-                                }
-                                Utils.showToast(DashBoard.object, "Details Entered Successfully");*/
-                                emptyView();
-                            }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        if (inserting) {
+                            inserting = false;
+                            Toast.makeText(context, "Details Entered Successfully", Toast.LENGTH_SHORT).show();
+                            containerActivity.finish();
                         }
-                    });
-                } else {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.dismiss();
-                            try {
-                                Toast.makeText(context, jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            emptyView();
-                        }
-                    });
-                }
 
+                        if (updating) {
+                            updating = false ;
+                            Toast.makeText(context, "Details Entered Successfully", Toast.LENGTH_SHORT).show();
+                            //emptyView();
+                        }
+                    }
+                });
+            } else {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        try {
+                            Toast.makeText(context, jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        emptyView();
+                    }
+                });
+            }
         }
-    }
-
-    private void setValuetoViews(BusinessProfileModel.ListModel data) {
-        follow_name.setText(data.c_name);
-        follow_mobile.setText(data.c_mobile_no);
-        follow_email.setText(data.c_email_id);
-        follow_area.setText(data.c_area);
-        follow_city.setText(data.c_city);
-        follow_pincode.setText(data.c_pinncode);
-        follow_state.setText(data.c_state);
     }
 
     @Override
@@ -296,6 +421,20 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         });
     }
 
+    private void setValueToViews(BusinessProfileModel.ListModel data) {
+        follow_name.setText(data.c_name);
+        follow_mobile.setText(data.c_mobile_no);
+        follow_email.setText(data.c_email_id);
+        follow_area.setText(data.c_area);
+        follow_city.setText(data.c_city);
+        follow_pincode.setText(data.c_pinncode);
+        follow_state.setText(data.c_state_name);
+        follow_country.setText(data.c_country_name);
+
+        country_id = data.c_country;
+        state_id = data.c_state;
+    }
+
     private void emptyView() {
         follow_name.setText("");
         follow_mobile.setText("");
@@ -304,6 +443,6 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         follow_city.setText("");
         follow_pincode.setText("");
         follow_state.setText("");
-
+        follow_country.setText("");
     }
 }

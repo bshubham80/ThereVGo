@@ -2,7 +2,6 @@ package com.android.therevgo.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +11,7 @@ import java.util.List;
 public class BusinessInfoModel {
 
     @SerializedName("status")
-    public boolean status;
+    public Boolean status;
     @SerializedName("message")
     public String message;
     @SerializedName("error")
@@ -20,11 +19,11 @@ public class BusinessInfoModel {
     @SerializedName("Data")
     public List<Data> Data;
 
-    public static class Data implements Serializable {
+    public static class Data {
         @SerializedName("id")
-        public int id;
+        public Integer id;
         @SerializedName("userid")
-        public int userid;
+        public Integer userid;
         @SerializedName("comp_name")
         public String comp_name;
         @SerializedName("company_type")
@@ -43,25 +42,35 @@ public class BusinessInfoModel {
         public String city;
         @SerializedName("pincode")
         public String pincode;
+        @SerializedName("state_id")
+        public String state_id;
         @SerializedName("state")
         public String state;
+        @SerializedName("country_id")
+        public String country_id;
         @SerializedName("country")
         public String country;
         @SerializedName("creation_date")
         public String creation_date;
         @SerializedName("created_by")
-        public int created_by;
+        public Integer created_by;
         @SerializedName("modification_date")
         public String modification_date;
         @SerializedName("modified_by")
-        public int modified_by;
+        public Integer modified_by;
         @SerializedName("status")
         public String status;
         @SerializedName("categoryid")
-        public String categoryid;
+        public Integer categoryid;
+        @SerializedName("categoryName")
+        public String categoryName;
         @SerializedName("subcategoryid")
-        public String subcategoryid;
+        public Integer subcategoryid;
+        @SerializedName("sub_category_name")
+        public String sub_category_name;
         @SerializedName("option_id")
         public String option_id;
+        @SerializedName("optionName")
+        public String optionName;
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,10 @@ import org.json.JSONObject;
  * Use the {@link BusinessListViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BusinessListViewFragment extends Fragment implements ResponseListener, AdapterView.OnItemClickListener {
+public class BusinessListViewFragment extends Fragment implements ResponseListener,
+                AdapterView.OnItemClickListener {
 
-    public static final String TAG = BusinessListViewFragment.class.getName();
+    public static final String TAG = BusinessListViewFragment.class.getSimpleName();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,6 +48,7 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
 
     private ListView mBusinessList;
     private ProgressBar mProgressBar;
+    private FloatingActionButton actionButton ;
     private Handler handler = new Handler();
     private Context context;
 
@@ -64,9 +67,8 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BusinessListViewFragment.
+     * @return A new instance of BusinessListViewFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static BusinessListViewFragment newInstance(String param1, String param2) {
         BusinessListViewFragment fragment = new BusinessListViewFragment();
         Bundle args = new Bundle();
@@ -99,18 +101,38 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
         context = view.getContext();
         prefManager = PrefManager.getInstance(context);
 
+        actionButton = (FloatingActionButton) view.findViewById(R.id.add_new_list);
         mBusinessList = (ListView) view.findViewById(R.id.business_profile_list);
         mBusinessList.setOnItemClickListener(this);
         mProgressBar = (ProgressBar) view.findViewById(R.id.business_progressBar);
 
         user_id = (String) prefManager.getDataFromPreference(PrefManager.Key.USER_ID,
                                                                 PrefManager.Type.TYPE_STRING);
+
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(ContainerActivity.ARG_FORCE_FINISH, true);
+                bundle.putString(ContainerActivity.ARG_TITLE, "Contact Info");
+                bundle.putInt(ContainerActivity.ARG_FRAGMENT, ContainerActivity.LISTING_FORM);
+
+                Intent intent = new Intent(context, ContainerActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         startNetwork();
     }
 
     public void startNetwork() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mBusinessList.setVisibility(View.GONE);
+        /*mBusinessList.setVisibility(View.GONE);*/
         String url = "http://tapi.therevgo.in/api/BusinessDetails/?userid="+user_id;
 
         HttpConnection.RequestGet(url, this);
@@ -139,7 +161,8 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+            mProgressBar.setVisibility(View.GONE);
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }

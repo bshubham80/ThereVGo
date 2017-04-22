@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.android.therevgo.activities.ContainerActivity;
 import com.android.therevgo.dto.BusinessInfoModel;
+import com.android.therevgo.dto.CountryModel;
+import com.android.therevgo.dto.StateModel;
 import com.android.therevgo.networks.HttpConnection;
 import com.android.therevgo.networks.ResponseListener;
 import com.android.therevgo.utility.PrefManager;
@@ -50,6 +52,11 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
     private static final int OPTION = 0;
     private static final int PRODUCT = 1;
     private static final int SUB_PRODUCT = 2;
+    private static final int COUNTRY = 3;
+    private static final int STATE = 4;
+    private final Gson gson = new Gson();
+
+    public String country_id, state_id ;
 
     private static final String[]paths = {"Select Company Type", "Limited", "Pvt. Ltd.", "Firm"};
 
@@ -60,7 +67,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
     private EditText et_company_name, et_company_type, et_option,
                      et_category, et_subcategory,et_business_name,
                         et_business_date, et_website;
-    private EditText et_area,et_city, et_pincode, et_state;
+    private EditText et_area,et_city, et_pincode, et_state, et_country;
 
 
 
@@ -82,7 +89,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
     private ContainerActivity containerActivity;
     private Utils utils = Utils.getInstance();
     
-    private List<Integer> MessageID;
+    private List<String> MessageID;
     private ArrayList<String> MessageText;
 
     public BusinessInfoFragment() {
@@ -125,6 +132,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         et_city = (EditText) view.findViewById(R.id.et_city);
         et_pincode = (EditText) view.findViewById(R.id.et_pin_code);
         et_state = (EditText) view.findViewById(R.id.et_state);
+        et_country = (EditText) view.findViewById(R.id.et_country);
 
         spinner_com_type = (Spinner)view.findViewById(R.id.spine_com_type);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
@@ -140,6 +148,8 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         btn_submit = (Button) view.findViewById(R.id.btn_submit);
         btn_update = (Button) view.findViewById(R.id.btn_update);
 
+        et_state.setOnClickListener(new MyClickListener());
+        et_country.setOnClickListener(new MyClickListener());
         btn_submit.setOnClickListener(new MyClickListener());
         btn_update.setOnClickListener(new MyClickListener());
 
@@ -172,15 +182,27 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 switch (ClickRefernece) {
                     case OPTION:
                         //optionID = MessageID.get(which);
-                        optionID = list.get(which);
+                        optionID = MessageID.get(which);
                     break;
+
                     case PRODUCT:
                         // productID = MessageID.get(which);
-                        productID = list.get(which);
+                        productID = MessageID.get(which);
                     break;
+
                     case SUB_PRODUCT:
                        //  subProductID = MessageID.get(which);
-                        subProductID = list.get(which);
+                        subProductID = MessageID.get(which);
+                    break;
+
+                    case COUNTRY:
+                        //  subProductID = MessageID.get(which);
+                        country_id = MessageID.get(which);
+                    break;
+
+                    case STATE:
+                        //  subProductID = MessageID.get(which);
+                        state_id = MessageID.get(which);
                     break;
                 }
             }
@@ -226,7 +248,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                                                 if (jsonArray.length() > 0) {
                                                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                                                         JSONObject object = jsonArray.getJSONObject(i);
-                                                        MessageID.add(object.getInt("optionid"));
+                                                        MessageID.add(object.getString("optionid"));
                                                         MessageText.add(object.getString("optionname"));
                                                     }
                                                     dialog.dismiss();
@@ -287,7 +309,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                                                 if (jsonArray.length() > 0) {
                                                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                                                         JSONObject object = jsonArray.getJSONObject(i);
-                                                        MessageID.add(object.getInt("id"));
+                                                        MessageID.add(object.getString("id"));
                                                         MessageText.add(object.getString("categoryName"));
                                                     }
                                                     dialog.dismiss();
@@ -344,7 +366,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                                                 if (jsonArray.length() > 0) {
                                                     for (int i = 0; i <= jsonArray.length() - 1; i++) {
                                                         JSONObject object = jsonArray.getJSONObject(i);
-                                                        MessageID.add(object.getInt("id"));
+                                                        MessageID.add(object.getString("id"));
                                                         MessageText.add(object.getString("sub_category_name"));
                                                     }
                                                     selectDropDown(containerActivity, "Select Category", et_subcategory, MessageText);
@@ -372,6 +394,95 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                         }
                     });
 
+                break;
+
+                case R.id.et_country:
+                    MessageID = new ArrayList<>();
+                    MessageText = new ArrayList<>();
+                    dialog.show();
+
+                    ClickRefernece = COUNTRY;
+                    state_id = null ;
+                    et_state.setText(null);
+
+                    String u2 = "http://tapi.therevgo.in/api/Country";
+                    HttpConnection.RequestGet(u2, new ResponseListener() {
+                        @Override
+                        public void onResponse(final int statusCode, final JSONObject jsonObject) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    if (statusCode == 200) {
+                                        CountryModel model = gson.fromJson(jsonObject.toString(), CountryModel.class);
+                                        if (model.status != null && model.status) {
+                                            if (model.Data.size() > 0) {
+                                                for (CountryModel.Data data : model.Data) {
+                                                    MessageID.add(data.CountryCode);
+                                                    MessageText.add(data.CountryName);
+                                                }
+                                                selectDropDown(containerActivity, "Select Country", et_country, MessageText);
+                                            } else {
+                                                Toast.makeText(context, "No Data Found", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Unable To Connect To Server", Toast.LENGTH_SHORT).show();
+                                            //utils.showToast(containerActivity, "Unable To Connect To Server");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
+                    break;
+
+                case R.id.et_state:
+                    MessageID = new ArrayList<>();
+                    MessageText = new ArrayList<>();
+                    dialog.show();
+
+                    ClickRefernece = STATE;
+
+                    String u3 = "http://tapi.therevgo.in/api/State?CountryCode="+country_id;
+                    HttpConnection.RequestGet(u3, new ResponseListener() {
+                        @Override
+                        public void onResponse(final int statusCode, final JSONObject jsonObject) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    if (statusCode == 200) {
+                                        StateModel model = gson.fromJson(jsonObject.toString(), StateModel.class);
+                                        if (model.status != null && model.status) {
+                                            if (model.Data.size() > 0) {
+                                                for (StateModel.Data data : model.Data) {
+                                                    MessageID.add(String.valueOf(data.id));
+                                                    MessageText.add(data.ST_NAME);
+                                                }
+                                                selectDropDown(containerActivity, "Select State", et_state, MessageText);
+                                            } else {
+                                                Toast.makeText(context, "No Data Found", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(context, "Unable To Connect To Server", Toast.LENGTH_SHORT).show();
+                                            //utils.showToast(containerActivity, "Unable To Connect To Server");
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+
+                        }
+                    });
                     break;
 
                 case R.id.et_business_date:
@@ -473,6 +584,9 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
             return false;
         }
 
+        if (!utils.validateView(containerActivity, et_country, "Enter Country Name")) {
+            return false;
+        }
         if (!utils.validateView(containerActivity, et_state, "Enter State Name")) {
             return false;
         }
@@ -500,7 +614,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 "&city="+           et_city.getText().toString()+
                 "&pincode="+        et_pincode.getText().toString()+
                 "&state="+          et_state.getText().toString()+
-                "&country=IN"+
+                "&country="+        country_id+
                 "&con_id="+         con_id+
                 "&id="+               info_id+
                 "&categoryid="+productID+
@@ -534,7 +648,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         map.add(new BasicNameValuePair("city", et_city.getText().toString()));
         map.add(new BasicNameValuePair("pincode", et_pincode.getText().toString()));
         map.add(new BasicNameValuePair("state", et_state.getText().toString()));
-        map.add(new BasicNameValuePair("country", "India"));
+        map.add(new BasicNameValuePair("country", et_country.getText().toString()));
 
         return map;
     }
@@ -554,18 +668,18 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         }
 
         optionID = data.option_id;
-        productID = data.categoryid;
-        subProductID = data.subcategoryid;
+        productID = String.valueOf(data.categoryid);
+        subProductID = String.valueOf(data.subcategoryid);
     
-        if (data.option_id != null) {    
-            et_option.setText(data.option_id+"");   
+        if (data.optionName != null) {
+            et_option.setText(data.optionName);
         }
     
-        if (data.categoryid != null) {
-            et_category.setText(data.categoryid+"");
+        if (data.categoryName != null) {
+            et_category.setText(data.categoryName);
         }
-        if (data.subcategoryid != null) {
-            et_subcategory.setText(data.subcategoryid+"");
+        if (data.sub_category_name != null) {
+            et_subcategory.setText(data.sub_category_name);
         }
 
         et_business_name.setText(data.bussiness_name);
@@ -576,7 +690,12 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         et_area.setText(data.area);
         et_city.setText(data.city);
         et_pincode.setText(data.pincode);
+
+        state_id = data.state_id;
+        country_id = data.country_id;
+
         et_state.setText(data.state);
+        et_country.setText(data.country);
     }
 
     @Override
@@ -586,14 +705,11 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
 
         if(fetchingData) {
             fetchingData = false;
-
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-
                     if (resObj.error == null) {
                         dialog.dismiss();
-
                         if (resObj.Data != null && resObj.Data.size() > 0) {
                             setValueToViews(resObj.Data.get(0));
                             btn_update.setVisibility(View.VISIBLE);
@@ -608,11 +724,9 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
 
         if(insertingData){
             insertingData = false;
-
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-
                     if (resObj.error == null) {
                         dialog.dismiss();
                         if (resObj.Data != null && resObj.Data.size() > 0) {
@@ -630,11 +744,9 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
 
         if(updatingData) {
             updatingData = false;
-
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-
                     if (resObj.error == null) {
                         dialog.dismiss();
                         if (resObj.Data != null && resObj.Data.size() > 0) {
@@ -680,6 +792,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         et_city.setText("");
         et_pincode.setText("");
         et_state.setText("");
+        et_country.setText("");
     }
 
 }

@@ -10,21 +10,21 @@ import java.util.List;
  */
 
 public class BusinessProfileModel {
-    
+
     @SerializedName("status")
-    public Boolean status;
+    public boolean status;
     @SerializedName("message")
-    public String     message;
+    public String message;
     @SerializedName("error")
-    public String     error;
+    public String error;
     @SerializedName("Data")
     public List<ListModel> Data;
-    
-    public static class ListModel implements Serializable{
+
+    public static class ListModel implements Serializable {
         @SerializedName("userid")
-        public Integer    userid;
+        public int userid;
         @SerializedName("con_id")
-        public Integer    con_id;
+        public int con_id;
         @SerializedName("c_name")
         public String c_name;
         @SerializedName("c_email_id")
