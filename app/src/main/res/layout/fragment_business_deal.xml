@@ -74,10 +74,20 @@
         android:layout_marginBottom="@dimen/activity_card_margin"
         android:layout_height="wrap_content" />
 
+    <com.android.therevgo.customviews.CustomButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/live_btn"
+        android:text="@string/live_your_app"
+        android:layout_marginLeft="@dimen/activity_card_margin"
+        android:layout_marginRight="@dimen/activity_card_margin"
+        android:layout_marginBottom="@dimen/activity_card_margin"
+        android:layout_below="@+id/btn_save_deals"/>
+
     <com.android.therevgo.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_save_deals"
+        android:layout_below="@+id/live_btn"
         android:id="@+id/tyui"
         android:textAllCaps="true"
         android:textColor="#000"

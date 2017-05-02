@@ -87,5 +87,6 @@
     <string name="action_select_all">Select All</string>
     <string name="ok">OK</string>
     <string name="valid_date_range">Please Select valid date range</string>
+    <string name="live_your_app">Live Your Listing</string>
 
 </resources>
