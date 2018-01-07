@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.therevgo.fragments.listing.BusinessDealFragment">
+    tools:context="com.android.therevgo.com.client.therevgo.fragments.listing.BusinessDealFragment">
 
 
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:id="@+id/txt_valid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 
     </android.support.v7.widget.CardView>
 
-    <com.android.therevgo.customviews.CustomButton
+    <com.client.therevgo.customviews.CustomButton
         android:id="@+id/btn_save_deals"
         android:layout_below="@+id/card_deal"
         android:layout_width="match_parent"
@@ -74,20 +74,20 @@
         android:layout_marginBottom="@dimen/activity_card_margin"
         android:layout_height="wrap_content" />
 
-    <com.android.therevgo.customviews.CustomButton
+    <com.client.therevgo.customviews.CustomButton
+        android:id="@+id/btn_live_deals"
+        android:layout_below="@+id/btn_save_deals"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/live_btn"
         android:text="@string/live_your_app"
         android:layout_marginLeft="@dimen/activity_card_margin"
         android:layout_marginRight="@dimen/activity_card_margin"
         android:layout_marginBottom="@dimen/activity_card_margin"
-        android:layout_below="@+id/btn_save_deals"/>
+        android:layout_height="wrap_content" />
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/live_btn"
+        android:layout_below="@+id/btn_live_deals"
         android:id="@+id/tyui"
         android:textAllCaps="true"
         android:textColor="#000"
@@ -101,7 +101,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/activity_card_margin"/>
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:id="@+id/contact_list_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

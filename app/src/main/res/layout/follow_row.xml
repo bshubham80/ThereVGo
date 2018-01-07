@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     tools:targetApi="lollipop">
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -22,30 +22,34 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:textColor="@android:color/holo_blue_dark"
             android:id="@+id/follow_email"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_gravity="center_horizontal" />
 
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:textColor="@android:color/holo_red_dark"
             android:id="@+id/follow_phone"
+            android:drawableStart="@drawable/ic_call"
+            android:drawableLeft="@drawable/ic_call"
+            android:drawablePadding="2dp"
+            android:text="9138916815"
             android:layout_weight="2"
-            android:gravity="right" />
+            android:gravity="center|start" />
 
     </LinearLayout>
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -57,7 +61,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -66,7 +70,7 @@
             android:layout_gravity="center_horizontal" />
 
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -74,7 +78,7 @@
             android:layout_weight="1"
             android:gravity="right" />
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group>
+        <item
+            android:id="@+id/nav_customer_inquiry"
+            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+            android:title="Customer Inquiry" />
         <item
             android:id="@+id/nav_show_follow_up"
             android:icon="@drawable/ic_menu_business"
@@ -19,6 +22,11 @@
             android:visible="false"
             android:icon="@drawable/ic_menu_supervisor"
             android:title="Business Support" />
+        <item
+            android:id="@+id/nav_services"
+            android:visible="true"
+            android:icon="@drawable/ic_room_service_black_24dp"
+            android:title="Services" />
     </group>
 
     <item android:title="Communicate">

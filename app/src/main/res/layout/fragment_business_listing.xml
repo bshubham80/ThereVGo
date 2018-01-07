@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.therevgo.fragments.listing.BusinessListingFragment">
+    tools:context="com.client.therevgo.fragments.listing.BusinessListingFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

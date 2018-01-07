@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.android.therevgo.activities.MainActivity"
+    tools:context="com.android.therevgo.com.client.therevgo.activities.MainActivity"
     tools:showIn="@layout/activity_container"
     android:id="@+id/activity_fragmentContainer">
 

@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:gravity="center"
-    tools:context="com.android.therevgo.activities.IntroSlider$PlaceholderFragment">
+    tools:context="com.android.therevgo.com.client.therevgo.activities.IntroSlider$PlaceholderFragment">
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"/>
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"

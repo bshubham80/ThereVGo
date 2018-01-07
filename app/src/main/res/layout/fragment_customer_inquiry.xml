@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.client.therevgo.fragments.inquiry.CustomerInquiry">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="From Date"
+        android:id="@+id/fromDate"
+        android:gravity="start|center"
+        android:layout_margin="@dimen/mini_padding"
+        android:background="@drawable/bottom_border"
+        android:drawableRight="@drawable/ic_down"
+        android:drawableEnd="@drawable/ic_down" />
+
+    <TextView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="To Date"
+        android:id="@+id/toDate"
+        android:gravity="start|center"
+        android:layout_margin="@dimen/mini_padding"
+        android:background="@drawable/bottom_border"
+        android:drawableRight="@drawable/ic_down"
+        android:drawableEnd="@drawable/ic_down" />
+
+    <TextView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Client"
+        android:id="@+id/client"
+        android:gravity="start|center"
+        android:layout_margin="@dimen/mini_padding"
+        android:background="@drawable/bottom_border"
+        android:drawableRight="@drawable/ic_down"
+        android:drawableEnd="@drawable/ic_down" />
+
+    <Button
+        android:id="@+id/btn_search_customer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/customerList"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

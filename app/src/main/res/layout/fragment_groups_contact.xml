@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.android.therevgo.fragments.group.GroupsContactFragment">
+    tools:context="com.android.therevgo.com.client.therevgo.fragments.group.GroupsContactFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -27,18 +27,18 @@
         android:textColor="@color/bg_screen2"
         android:text="@string/add" />
 
-    <com.android.therevgo.customviews.RecyclerViewWithEmptyView
+    <com.client.therevgo.customviews.RecyclerViewWithEmptyView
         android:id="@+id/group_contacts_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/txt_group_name"
         android:dividerHeight="1dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.android.therevgo.fragments.group.GroupsContactFragment"
+        tools:context="com.android.therevgo.com.client.therevgo.fragments.group.GroupsContactFragment"
         android:name="com.android.therevgo.fragments.group.GroupsContactFragment"
         tools:listitem="@layout/contact_info"/>
 
-    <com.android.therevgo.customviews.CustomTextView
+    <com.client.therevgo.customviews.CustomTextView
         android:id="@+id/contact_list_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

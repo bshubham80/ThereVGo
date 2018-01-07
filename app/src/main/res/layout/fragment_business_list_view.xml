@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.therevgo.fragments.listing.BusinessListViewFragment">
+    tools:context="com.client.therevgo.fragments.listing.BusinessListViewFragment">
 
     <RelativeLayout
         android:id="@+id/empty_view"
@@ -12,19 +12,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.android.therevgo.customviews.CustomTextView
+        <com.client.therevgo.customviews.CustomTextView
             android:id="@+id/customTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:textAllCaps="true"
+            android:gravity="center"
+            android:textColor="#80000000"
             android:text="@string/business_empty_list" />
 
-        <com.android.therevgo.customviews.CustomButton
+        <com.client.therevgo.customviews.CustomButton
             android:id="@+id/customButton"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="@string/action_create"
+            android:visibility="gone"
             android:layout_centerHorizontal="true"
             android:textColor="@color/colorPrimary"
             android:layout_below="@+id/customTextView"
