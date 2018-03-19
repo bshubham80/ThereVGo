@@ -195,7 +195,7 @@ public class SmsHintFragment extends Fragment implements ResponseListener {
     }
 
     private void showList(ArrayList<String> messageText) {
-         adapter= new ArrayAdapter<>(context, R.layout.group_list_item, messageText);
+         adapter= new ArrayAdapter<>(context, R.layout.simple_text_view, messageText);
          msgList.setAdapter(adapter);
     }
 

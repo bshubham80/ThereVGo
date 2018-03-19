@@ -139,7 +139,7 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
                           //Utils.showToast(context, resObj.message);
                           et_deal_in.setText("");
                           
-                          if ( resObj.Data.size() > 6){
+                          if (resObj.Data.size() > 6){
                               btn_submit.setText("Only 6 keywords allowed for a business");
                               btn_submit.setEnabled(false);
                           }
@@ -237,7 +237,7 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
                 case R.id.btn_live_deals:
                     String msg, btnText ;
                     if (BusinessContactInfoFragment.LIVE_STATUS.equals("Y")) {
-                        msg = "You List will remove.";
+                        msg = "You list will be suspended.";
                         btnText = "UNLIVE";
                     } else {
                         msg = "We will live your list with in 48 hours";
@@ -290,6 +290,8 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
                                 new Gson().fromJson(jsonObject.toString(), ListStatusDTO.class);
                         if (profileModel.Data != null && profileModel.Data.size() > 0) {
                             Toast.makeText(activity, "Thanks for list your business. We will live your list with in 48 hours ", Toast.LENGTH_SHORT).show();
+                            // finish activity.
+                            activity.finish();
                         } else {
                             if (profileModel.error != null) {
                                 onError(profileModel.error);

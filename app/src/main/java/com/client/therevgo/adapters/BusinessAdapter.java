@@ -91,7 +91,7 @@ public class BusinessAdapter extends ArrayAdapter<BusinessProfileModel.ListModel
             viewHolder.mBusinessAddress.setText(data.c_email_id);
         }
 
-        if (data.c_live_status.equals("N")) {
+        if (!data.c_live_status.equals("N")) {
             viewHolder.mBusinessLive.setText(LIVE);
             viewHolder.mBusinessLive.setTextColor(Color.parseColor("#0C9342"));
         } else {

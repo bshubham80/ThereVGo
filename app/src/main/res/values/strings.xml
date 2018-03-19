@@ -46,7 +46,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <!--Business Listing Fragment String Resource-->
     <string name="listing">Listing</string>
-    <string name="fragment_listing_description">ThereVGo provide a complete solution of all issues releated with Business listing, offer listing, New products listing, event listing. This will help you to gain emmence profit opportunities.</string>
+    <string name="fragment_listing_description">ThereVGo provide a complete solution of all issues releated with Business listing, offer listing, New products listing, event listing. This will help you to gain immense profit opportunities.</string>
 
     <!--Create Follow up fragment string res-->
     <string name="selecttitle">Select Title</string>
@@ -88,5 +88,9 @@
     <string name="ok">OK</string>
     <string name="valid_date_range">Please Select valid date range</string>
     <string name="live_your_app">Live Your Listing</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

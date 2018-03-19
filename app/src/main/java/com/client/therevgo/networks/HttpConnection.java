@@ -167,8 +167,9 @@ public class HttpConnection {
                     HttpEntity entity = mpEntity.build();
 
                     HttpPost httppost = new HttpPost(url);
-                   // httppost.addHeader("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryt2wg4s9P4AfTS1Ny");
-                    httppost.addHeader("Content-Type","application/x-www-form-urlencoded");
+
+                    httppost.setHeader("Content-Type","application/x-www-form-urlencoded");
+                    //httppost.addHeader("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundaryt2wg4s9P4AfTS1Ny");
                     //httppost.addHeader("Content-Type","application/x-www-form-urlencoded");
                     httppost.setEntity(entity);
 

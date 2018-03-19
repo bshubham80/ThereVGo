@@ -143,13 +143,14 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                 case R.id.btn_submit:
                     Button btn = (Button) v;
                     if(btn.getText().toString().equals("NEXT")) {
-                        Fragment fragment = new BusinessInfoFragment();
+                       /* Fragment fragment = new BusinessInfoFragment();
                         Bundle bundle = new Bundle();
                         bundle.putInt(CONTACT_ID, con_id);
 
                         fragment.setArguments(bundle);
 
-                        containerActivity.attachFragment(fragment, BusinessInfoFragment.TAG);
+                        containerActivity.attachFragment(fragment, BusinessInfoFragment.TAG);*/
+                       changeFragment();
                     } else {
                         if(validateForm()) {
                             insertValues();
@@ -320,12 +321,14 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         }
         return true ;
     }
+
     private void insertValues() {
         inserting = true ;
         dialog.show();
         String URL = "http://tapi.therevgo.in/api/BusinessListing/BUSCONTINS";
         HttpConnection.RequestPost(URL, getRequestParam(), this);
     }
+
     private void updatesValues() {
         updating = true ;
         dialog.show();
@@ -385,7 +388,8 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                         if (inserting) {
                             inserting = false;
                             Toast.makeText(context, "Details Entered Successfully", Toast.LENGTH_SHORT).show();
-                            containerActivity.finish();
+                            //containerActivity.finish();
+                            changeFragment();
                         }
 
                         if (updating) {
@@ -448,5 +452,15 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
         follow_pincode.setText("");
         follow_state.setText("");
         follow_country.setText("");
+    }
+
+    private void changeFragment() {
+        Fragment fragment = new BusinessInfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(CONTACT_ID, con_id);
+
+        fragment.setArguments(bundle);
+
+        containerActivity.attachFragment(fragment, BusinessInfoFragment.TAG);
     }
 }

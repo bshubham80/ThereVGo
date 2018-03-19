@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
@@ -58,6 +59,8 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
     private BusinessProfileModel profileModel;
     private BusinessAdapter adapter;
     private String user_id;
+
+    private TextView mInfoText;
 
     public BusinessListViewFragment() {
         // Required empty public constructor
@@ -109,6 +112,9 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
         mBusinessList.setOnItemClickListener(this);
         mProgressBar = (ProgressBar) view.findViewById(R.id.business_progressBar);
 
+
+        mBusinessList.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.layoout_business_list_header, null));
+
         user_id = (String) prefManager.getDataFromPreference(PrefManager.Key.USER_ID,
                                                                 PrefManager.Type.TYPE_STRING);
 
@@ -157,6 +163,7 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
                        onError(profileModel.error);
                    } else {
                        emptyLayout.setVisibility(View.VISIBLE);
+                       mProgressBar.setVisibility(View.GONE);
                    }
                 }
             }
@@ -177,6 +184,11 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        position = position -1;
+
+        if (position < 0)
+            return;
+
         BusinessProfileModel.ListModel model = profileModel.Data.get(position);
 
         Bundle bundle = new Bundle();

@@ -109,7 +109,7 @@ public class SavedSmsFragment extends Fragment {
                                         mSMSList.add(model);
 
                                         //add grouplist in adapter
-                                        adapter = new SavedSmsAdapter(context, R.layout.group_list_item, mSMSList);
+                                        adapter = new SavedSmsAdapter(context, R.layout.simple_text_view, mSMSList);
 
                                         //set adapter to listview
                                         mGroupList.setAdapter(adapter);
@@ -185,7 +185,7 @@ public class SavedSmsFragment extends Fragment {
 
                 //refresh listview adapter
                 if (adapter == null) {
-                    adapter = new SavedSmsAdapter(context, R.layout.group_list_item, mSMSList);
+                    adapter = new SavedSmsAdapter(context, R.layout.simple_text_view, mSMSList);
                     //set adapter to listview
                     mGroupList.setAdapter(adapter);
                 } else {

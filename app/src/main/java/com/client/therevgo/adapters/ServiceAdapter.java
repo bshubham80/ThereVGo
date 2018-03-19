@@ -32,8 +32,8 @@ public class ServiceAdapter extends BaseAdapter {
     };
     // Keep all Images in array
     private String[] mLiveIds = {
-            "", "Comming Soon",
-            "Comming Soon", "Comming Soon"
+            "", "Coming Soon",
+            "Coming Soon", "Coming Soon"
     };
     // Keep all Images in array
     private String mColorIds = "#FF9CE9BB";

@@ -189,15 +189,20 @@ public class GroupsContactFragment extends Fragment implements ContactActivity.C
                 int resGroup = contactTable.deleteContact("" + contactID);
 
                 //get new data from database in list
-                Iterator<ContactBean> it = ITEMS.iterator();
+                /*Iterator<ContactBean> it = ITEMS.iterator();
                 while (it.hasNext()) {
                     ContactBean bean = it.next();
                     if (bean.getId() == contactID) {
                         it.remove();
                     }
-                }
+                }*/
 
-                //refresh listview adapter
+                ITEMS.clear();
+                Vector<ContactBean> beanList = contactTable.getAllDataByID(String.valueOf(mGroupID));
+
+                ITEMS.addAll(beanList);
+
+                //refresh listView adapter
                 adapter.notifyDataSetChanged();
 
                 dialog.dismiss();

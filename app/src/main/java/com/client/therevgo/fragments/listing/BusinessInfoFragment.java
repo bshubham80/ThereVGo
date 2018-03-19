@@ -499,12 +499,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                     Button btn = (Button) v;
                     if(btn.getText().toString().equals("NEXT")) {
                         
-                        Fragment fragment = new BusinessLogoFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(BusinessContactInfoFragment.CONTACT_ID, con_id);
-
-                        fragment.setArguments(bundle);
-                        containerActivity.attachFragment(fragment,BusinessLogoFragment.TAG);
+                        changeFragment();
                     } else {
                         if(validateForm()) {
                             insertingData = true ;
@@ -521,6 +516,15 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 break;
             }
         }
+    }
+
+    private void changeFragment() {
+        Fragment fragment = new BusinessLogoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(BusinessContactInfoFragment.CONTACT_ID, con_id);
+
+        fragment.setArguments(bundle);
+        containerActivity.attachFragment(fragment,BusinessLogoFragment.TAG);
     }
 
     private class MyDateListener implements DatePickerDialog.OnDateSetListener {
@@ -613,7 +617,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 "&area="+           et_area.getText().toString()+
                 "&city="+           et_city.getText().toString()+
                 "&pincode="+        et_pincode.getText().toString()+
-                "&state="+          et_state.getText().toString()+
+                "&state="+          state_id+
                 "&country="+        country_id+
                 "&con_id="+         con_id+
                 "&id="+               info_id+
@@ -647,8 +651,8 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         map.add(new BasicNameValuePair("area", et_area.getText().toString()));
         map.add(new BasicNameValuePair("city", et_city.getText().toString()));
         map.add(new BasicNameValuePair("pincode", et_pincode.getText().toString()));
-        map.add(new BasicNameValuePair("state", et_state.getText().toString()));
-        map.add(new BasicNameValuePair("country", et_country.getText().toString()));
+        map.add(new BasicNameValuePair("state", state_id));
+        map.add(new BasicNameValuePair("country", country_id));
 
         return map;
     }
@@ -729,12 +733,14 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 public void run() {
                     if (resObj.error == null) {
                         dialog.dismiss();
-                        if (resObj.Data != null && resObj.Data.size() > 0) {
+                        /*if (resObj.Data != null && resObj.Data.size() > 0) {
                             setValueToViews(resObj.Data.get(0));
                         } else {
                             Toast.makeText(context, resObj.message, Toast.LENGTH_SHORT).show();
                             emptyView();
-                        }
+                        }*/
+                        Toast.makeText(context, resObj.message, Toast.LENGTH_SHORT).show();
+                        changeFragment();
                     } else {
                         onError(resObj.error);
                     }

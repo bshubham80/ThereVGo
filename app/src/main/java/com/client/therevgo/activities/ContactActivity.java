@@ -33,6 +33,7 @@ import com.client.therevgo.fragments.sms.SendSmsFragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -58,6 +59,7 @@ public class ContactActivity extends AppCompatActivity {
     SelectUserAdapter adapter;
 
     private boolean isSelectAll = false ;
+    private ProgressDialog dialog;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -67,6 +69,12 @@ public class ContactActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        dialog = new ProgressDialog(this) ;
+        dialog.setMessage("Please Wait.....");
+        dialog.setCancelable(false);
+        dialog.dismiss();
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -123,27 +131,14 @@ public class ContactActivity extends AppCompatActivity {
     }
 
     // Load data on background
-    private class LoadContact extends AsyncTask<Void, Void, Void> {
-        ProgressDialog dialog ;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(ContactActivity.this) ;
-            dialog.setMessage("Please Wait.....");
-            dialog.setCancelable(false);
-            dialog.show();
-
-        }
+    @SuppressLint("StaticFieldLeak")
+    private class LoadContact extends AsyncTask<Void, Void, ArrayList> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected ArrayList doInBackground(Void... voids) {
             // Get Contact list from Phone
 
             if (phones != null) {
-                Log.e("count", "" + phones.getCount());
-                if (phones.getCount() == 0) {
-                    Toast.makeText(ContactActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
-                }
 
                 while (phones.moveToNext()) {
 
@@ -152,9 +147,7 @@ public class ContactActivity extends AppCompatActivity {
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     String image_thumb = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
-                        image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
-                    }
+                    image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                     try {
                         if (image_thumb != null) {
                             bit_thumb = MediaStore.Images.Media.getBitmap(resolver, Uri.parse(image_thumb));
@@ -181,16 +174,20 @@ public class ContactActivity extends AppCompatActivity {
                 Log.e("Cursor close 1", "----------------");
             }
             //phones.close();
-            return null;
+            return selectUsers;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(ArrayList list) {
+            super.onPostExecute(list);
 
-            adapter = new SelectUserAdapter(selectUsers, ContactActivity.this);
+            if (list.size() == 0) {
+                Toast.makeText(ContactActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+            }
+            adapter =  new SelectUserAdapter(list, ContactActivity.this);
             listView.setAdapter(adapter);
-            dialog.dismiss();
+            if (dialog != null)
+                dialog.dismiss();
 
             listView.setFastScrollEnabled(true);
             addMultiChoice();
@@ -199,73 +196,71 @@ public class ContactActivity extends AppCompatActivity {
 
     private void addMultiChoice() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-                        if(checked) {
-                            adapter.setSelectedItem(position, true);
-                            mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                        } else {
-                            adapter.removeSelectedItem(position, false);
-                            mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                        }
+                    if(checked) {
+                        adapter.setSelectedItem(position, true);
+                        mode.setTitle(adapter.getSelectedItemSize() + " Selected");
+                    } else {
+                        adapter.removeSelectedItem(position, false);
+                        mode.setTitle(adapter.getSelectedItemSize() + " Selected");
+                    }
 
-                }
+            }
 
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    MenuInflater inflater = getMenuInflater();
-                    inflater.inflate(R.menu.contact_action,menu);
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = getMenuInflater();
+                inflater.inflate(R.menu.contact_action,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                int id = item.getItemId();
+                switch (id){
+                    case R.id.send:
+                        HashMap<String,String> phoneMap = adapter.getCheckedItems() ;
+                        mListener.onContactListFound(ContactActivity.this,phoneMap);
                     return true;
-                }
 
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                    int id = item.getItemId();
-                    switch (id){
-                        case R.id.send:
-                            HashMap<String,String> phoneMap = adapter.getCheckedItems() ;
-                            mListener.onContactListFound(ContactActivity.this,phoneMap);
-                        return true;
-
-                        case R.id.select_all:
-                            if(!isSelectAll) {
-                                for (int i = 0; i <= adapter.getCount() - 1; i++) {
-                                    adapter.setSelectedItem(i, true);
-                                }
-                                mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                                isSelectAll = true ;
-                            }else {
-                                Toast.makeText(ContactActivity.this, "Already Selected", Toast.LENGTH_SHORT).show();
+                    case R.id.select_all:
+                        if(!isSelectAll) {
+                            for (int i = 0; i <= adapter.getCount() - 1; i++) {
+                                adapter.setSelectedItem(i, true);
                             }
-                        return true ;
+                            mode.setTitle(adapter.getSelectedItemSize() + " Selected");
+                            isSelectAll = true ;
+                        }else {
+                            Toast.makeText(ContactActivity.this, "Already Selected", Toast.LENGTH_SHORT).show();
+                        }
+                    return true ;
 
-                        default:
-                        return false ;
-                    }
+                    default:
+                    return false ;
                 }
+            }
 
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    //mode.finish();
-                    adapter.clearSelectedList();
-                    isSelectAll = false ;
-                    if(phoneList.size() > 0) {
-                        phoneList.clear();
-                    }
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                //mode.finish();
+                adapter.clearSelectedList();
+                isSelectAll = false ;
+                if(phoneList.size() > 0) {
+                    phoneList.clear();
                 }
-            });
-        }
+            }
+        });
 
     }
 

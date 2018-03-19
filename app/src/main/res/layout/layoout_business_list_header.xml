@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/infor_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+    android:textColor="#332f2f"
+        android:text="If Your form is incomplete.Tap on your business listing to complete it ?" />

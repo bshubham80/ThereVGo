@@ -83,14 +83,14 @@ public class GroupTable {
 	 * @param obj hold the value that store in database
      * @return 1 if operation is successful or -1 if fails
      */
-	public int updateData(GroupBean obj) {
+	public int updateGroup(GroupBean obj) {
 		int rowsAffected = -1;
 		SQLiteDatabase db;
 		synchronized (lock) {
 			try {
 				db = appDb.getWritableDatabase(TABLE_NAME);
 				ContentValues values = new ContentValues();
-				values.put(COL_ID, obj.getId());
+				//values.put(COL_ID, obj.getId());
 				values.put(COL_NAME, obj.getName());
 
 				String selection = COL_ID + "=? ";

@@ -46,17 +46,19 @@
     <ListView
         android:id="@+id/business_profile_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_new_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:tint="#FFF"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add"
+        android:tint="#FFF" />
 
 </RelativeLayout>

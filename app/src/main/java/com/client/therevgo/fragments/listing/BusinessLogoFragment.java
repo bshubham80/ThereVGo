@@ -6,8 +6,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -35,6 +37,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.client.therevgo.activities.ContainerActivity;
 import com.client.therevgo.adapters.DialogAdapter;
 import com.client.therevgo.dto.BusinessImageModel;
@@ -44,9 +50,9 @@ import com.client.therevgo.networks.HttpConnection;
 import com.client.therevgo.networks.ResponseListener;
 import com.client.therevgo.utility.PrefManager;
 import com.client.therevgo.utility.Utils;
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
@@ -69,30 +75,24 @@ import java.util.Locale;
 public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
     public static final String TAG = BusinessLogoFragment.class.getName();
-
-    static final int REQUEST_CAMERA = 0;
-    static final int REQUEST_GALLERY = 1;
-
     public static final int REQUEST_IMAGE_CAPTURE = 0;
     public static final int REQUEST_IMAGE_GALLERY = 1;
-
     public static final String URL_SUFFIX = "http://www.therevgo.in/product_img/";
-
+    static final int REQUEST_CAMERA = 0;
+    static final int REQUEST_GALLERY = 1;
+    public int con_id, image_id = -1;
     private Button btn_upload;
     private Button btn_submit, btn_update;
     private ImageView logo;
+    private Context context;
+    private String user_id;
 
-    private Context context ;
+    private ContainerActivity containerActivity;
 
-    public int con_id, image_id = -1 ;
-    private String user_id ;
-    
-    private ContainerActivity containerActivity ;
-
-    private Resources res ;
+    private Resources res;
 
     private Uri mCurrentPhotoUri, selectedImageUri;
-    private String selectedImagePath, mCurrentPhotoPath ;
+    private String selectedImagePath, mCurrentPhotoPath;
 
     private ProgressDialog dialog;
 
@@ -106,16 +106,65 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
     private boolean fetchingData, insertingData, updatingData;
 
+    private String url;
+    private RequestQueue mRequestQueue;
+
     public BusinessLogoFragment() {
         // Required empty public constructor
     }
 
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        final float totalPixels = width * height;
+        final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+
+        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+            inSampleSize++;
+        }
+
+        return inSampleSize;
+    }
+
+    public static void setPic(ImageView mImageView, String mCurrentPhotoPath) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        // Determine how much to scale down the image
+        int scaleFactor = 0;
+        if (targetW != 0 && targetH != 0)
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_business_logo, container, false);
+        View view = inflater.inflate(R.layout.fragment_business_logo, container, false);
 
         context = getActivity();
 
@@ -143,18 +192,18 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
 
         Bundle bundle = getArguments();
-        if (bundle != null){
+        if (bundle != null) {
             con_id = bundle.getInt(BusinessContactInfoFragment.CONTACT_ID);
-            String url = "http://tapi.therevgo.in/api/BusinessImgListing/GetBusImgSel?" +
+            url = "http://tapi.therevgo.in/api/BusinessImgListing/GetBusImgSel?" +
                     "userid=" +
-                    user_id+
-                    "&con_id="+con_id;
+                    user_id +
+                    "&con_id=" + con_id;
 
-            fetchingData = true ;
+            fetchingData = true;
             dialog.show();
             HttpConnection.RequestGet(url, this);
         }
-        return view ;
+        return view;
     }
 
     @Override
@@ -162,7 +211,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         Gson gson = new Gson();
         final BusinessImageModel resObj = gson.fromJson(jsonObject.toString(), BusinessImageModel.class);
 
-        if(fetchingData) {
+        if (fetchingData) {
             fetchingData = false;
 
             handler.post(new Runnable() {
@@ -175,11 +224,11 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                         if (resObj.Data != null && resObj.Data.size() > 0) {
                             dialog.dismiss();
                             image_id = resObj.Data.get(0).id;
-                            String image_path = URL_SUFFIX+resObj.Data.get(0).image_name;
+                            String image_path = URL_SUFFIX + resObj.Data.get(0).image_name;
                             btn_update.setVisibility(View.VISIBLE);
                             btn_submit.setText("NEXT");
                             /*if (imageLoader.getBitmap(image_path) == null) {*/
-                                loadLogo(image_path);
+                            loadLogo(image_path);
                             /*} else {
                                 logo.setImageBitmap(imageLoader.getBitmap(image_path));
                             }*/
@@ -191,14 +240,14 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             });
         }
 
-        if(insertingData) {
+        if (insertingData) {
             insertingData = false;
 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
 
-                    if (resObj.error == null) {
+                    /*if (resObj.error == null) {
                         dialog.dismiss();
 
                         if (resObj.Data != null && resObj.Data.size() > 0) {
@@ -209,19 +258,22 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                         }
                     } else {
                         onError(resObj.error);
-                    }
+                    }*/
+                    fetchingData = true;
+                    dialog.show();
+                    HttpConnection.RequestGet(url, BusinessLogoFragment.this);
                 }
             });
         }
 
-        if(updatingData) {
+        if (updatingData) {
             updatingData = false;
 
             handler.post(new Runnable() {
                 @Override
                 public void run() {
 
-                    if (resObj.error == null) {
+                    /*if (resObj.error == null) {
                         dialog.dismiss();
 
                         if (resObj.Data != null && resObj.Data.size() > 0) {
@@ -229,11 +281,14 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
                             String image_path = URL_SUFFIX+resObj.Data.get(0).image_name;
                             loadLogo(image_path);
-                            containerActivity.finish();
+                            //containerActivity.finish();
                         }
                     } else {
                         onError(resObj.error);
-                    }
+                    }*/
+                    fetchingData = true;
+                    dialog.show();
+                    HttpConnection.RequestGet(url, BusinessLogoFragment.this);
                 }
             });
         }
@@ -250,7 +305,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         });
     }
 
-    private void loadLogo(String imageURL){
+    private void loadLogo(String imageURL) {
         Glide.with(context).load(imageURL).into(logo);
     }
 
@@ -264,8 +319,8 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         lv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         ArrayList<DialogBean> models = new ArrayList<>();
-        models.add(new DialogBean(res.getString(R.string.camera),0));
-        models.add(new DialogBean(res.getString(R.string.gallery),0));
+        models.add(new DialogBean(res.getString(R.string.camera), 0));
+        models.add(new DialogBean(res.getString(R.string.gallery), 0));
 
         DialogAdapter adapter = new DialogAdapter(activity, R.layout.dialog_row_layout, models);
         lv.setAdapter(adapter);
@@ -283,9 +338,9 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                     case 0:
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (context.checkSelfPermission(Manifest.permission.CAMERA) !=
-                                                              PackageManager.PERMISSION_GRANTED ) {
+                                    PackageManager.PERMISSION_GRANTED) {
                                 requestPermissions(new String[]{Manifest.permission.CAMERA}
-                                                  ,REQUEST_CAMERA);
+                                        , REQUEST_CAMERA);
                             } else {
                                 startCameraOperation();
                             }
@@ -297,9 +352,9 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                     case 1:
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                               != PackageManager.PERMISSION_GRANTED ) {
+                                    != PackageManager.PERMISSION_GRANTED) {
                                 requestPermissions(new String[]
-                                     {Manifest.permission.READ_EXTERNAL_STORAGE},REQUEST_GALLERY);
+                                        {Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_GALLERY);
                             } else {
                                 startGalleryOperation();
                             }
@@ -313,7 +368,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         });
     }
 
-    private void startCameraOperation(){
+    private void startCameraOperation() {
         try {
             File photoFile = createImageFile(getActivity());
             // Save a file: path for use with ACTION_VIEW intents
@@ -329,7 +384,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCurrentPhotoUri);
             getActivity().startActivityFromFragment(this, captureIntent, REQUEST_IMAGE_CAPTURE);
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             // Error occurred while creating the File
             ex.printStackTrace();
             Log.e(TAG, "Exception: " + ex.getMessage());
@@ -337,12 +392,12 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void startGalleryOperation(){
+    private void startGalleryOperation() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY,true);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
-        getActivity().startActivityFromFragment(this,photoPickerIntent, REQUEST_IMAGE_GALLERY);
+        getActivity().startActivityFromFragment(this, photoPickerIntent, REQUEST_IMAGE_GALLERY);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -366,11 +421,10 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             if (selectedImagePath != null)
                 new ImageCompressionAsyncTask(false).execute(selectedImagePath);
             else {
-                utils.displayAlert(context,res.getString(R.string.error), getString(R.string.not_valid_photo));
+                utils.displayAlert(context, res.getString(R.string.error), getString(R.string.not_valid_photo));
             }
         }
     }
-
 
     private File createImageFile(Activity activity) throws IOException {
         // Create an image file name
@@ -411,14 +465,14 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         //cursor.moveToFirst();
         String picturePath = null;
 
-        if(imageCursor != null ) {
+        if (imageCursor != null) {
             if (imageCursor.moveToFirst()) {
                 int columnIndex = imageCursor.getColumnIndex(filePathColumn[0]);
                 picturePath = imageCursor.getString(columnIndex);
             }
             imageCursor.close();
-        } else{
-            picturePath = getRealPathFromURI(activity,imageUri);
+        } else {
+            picturePath = getRealPathFromURI(activity, imageUri);
         }
 
         return picturePath;
@@ -466,8 +520,8 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         return false;
     }
 
-   private String getMimeType(Uri selectedImageUri) {
-        String type ;
+    private String getMimeType(Uri selectedImageUri) {
+        String type;
         String extension = null;
 
         if (selectedImageUri != null)
@@ -483,54 +537,100 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         return type;
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
+    private void uploadImage() {
+        ContentBody cbFile = new FileBody(uploadableFile);
 
-        if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-        final float totalPixels = width * height;
-        final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+        entityBuilder.addTextBody("userid", user_id, ContentType.DEFAULT_TEXT);
+        entityBuilder.addBinaryBody("image_name", uploadableFile);
+        entityBuilder.addTextBody("con_id", String.valueOf(con_id), ContentType.DEFAULT_TEXT);
 
-        while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
-            inSampleSize++;
-        }
-
-        return inSampleSize;
+        String url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS";
+        HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);
     }
 
-   public static void setPic(ImageView mImageView, String mCurrentPhotoPath) {
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+    public RequestQueue getRequestQueue() {
+        // lazy initialize the request queue, the queue instance will be
+        // created when it is accessed for the first time
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(getContext(), new HurlStack());
+        }
 
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
+        return mRequestQueue;
+    }
 
-        // Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
+   /*private void upload2() {
+       Map<String, File> mFilePartData = new HashMap<>();
+       Map<String, String> mStringPart = new HashMap<>();
+       Map<String, String> headers = new HashMap<>();
 
-        // Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-        // Determine how much to scale down the image
-        int scaleFactor = 0;
-        if (targetW != 0 && targetH != 0)
-            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
+       // Header Details
+       headers.put("Content-Type", "application/x-www-form-urlencoded");
+       // other details params
+       mStringPart.put("userid",user_id);
+       mStringPart.put("con_id",String.valueOf(con_id));
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);
-   }
+       mFilePartData.put("image_name", uploadableFile);
 
-   private class MyClickListener implements View.OnClickListener {
+       url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS";
+
+       final MultipartUpload upload = new MultipartUpload(
+               Request.Method.POST,
+               context,
+               url,
+               new Response.Listener<JSONObject>() {
+                   @Override
+                   public void onResponse(JSONObject response) {
+                       updatingData = false;
+                       fetchingData = true ;
+                       dialog.show();
+                       HttpConnection.RequestGet(url, BusinessLogoFragment.this);
+                   }
+               }, new Response.ErrorListener() {
+                   @Override
+                   public void onErrorResponse(VolleyError error) {
+                       dialog.dismiss();
+                       Log.i(TAG, "onErrorResponse: "+new String(error.networkResponse.data));
+                   }
+               },mFilePartData,mStringPart,headers);
+
+       getRequestQueue().add(upload);
+   }*/
+
+    private void showInfoDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(false);
+        builder.setMessage("Sorry for inconvenience!! Our app is under construction." +
+                " Please try to upload your image through web log on to http://www.therevgo.in. ");
+        /*builder.setPositiveButton("Open", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://www.therevgo.in/"));
+                try {
+                    getContext().startActivity(intent);
+                } catch (ActivityNotFoundException e){
+                    Toast.makeText(context, "Unable to open browser", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });*/
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+               dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private class MyClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -538,64 +638,42 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             switch (id) {
                 case R.id.btn_submit:
                     Button btn = (Button) v;
-                    if(btn.getText().toString().equals("NEXT")) {
+                    if (btn.getText().toString().equals("NEXT")) {
 
                         Fragment fragment = new BusinessDealFragment();
                         Bundle bundle = new Bundle();
                         bundle.putInt(BusinessContactInfoFragment.CONTACT_ID, con_id);
 
                         fragment.setArguments(bundle);
-                        containerActivity.attachFragment(fragment,BusinessDealFragment.TAG);
+                        containerActivity.attachFragment(fragment, BusinessDealFragment.TAG);
                     } else {
-                        insertingData = true ;
+                        showInfoDialog();
+                        /*insertingData = true;
 
                         dialog.show();
 
-                        String convertFile = uploadableFile.getAbsolutePath();
-                        ContentBody cbFile = new FileBody(uploadableFile);
-
-                        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-                        entityBuilder.addPart("image", cbFile);
-                        entityBuilder.addTextBody("userid",user_id);
-                        entityBuilder.addTextBody("con_id", String.valueOf(con_id));
-
-                        String url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS";
-
-                        HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);
-                        //  insertValues();
-
+                        uploadImage();*/
                     }
-                break;
+                    break;
 
                 case R.id.btn_update:
-                    updatingData = true ;
+                    showInfoDialog();
+                    /*updatingData = true;
 
                     dialog.show();
 
-                    String convertFile = uploadableFile.getAbsolutePath();
-                    ContentBody cbFile = new FileBody(uploadableFile);
-
-                    MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-                    entityBuilder.addPart("image", cbFile);
-                    entityBuilder.addTextBody("userid",user_id);
-                    entityBuilder.addTextBody("con_id", String.valueOf(con_id));
-
-                    String url ;
-                    if(image_id != -1) {
-                        entityBuilder.addTextBody("id", String.valueOf(image_id));
-                        url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgUPD";
-                        HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);
-                    }
-                break;
+                    uploadImage();*/
+                    break;
 
                 case R.id.btn_upload:
-                    intentForCapturingImage();
-                break;
+                    showInfoDialog();
+                    /*intentForCapturingImage();*/
+                    break;
             }
         }
-   }
+    }
 
-   private class ImageCompressionAsyncTask extends AsyncTask<String, Void, String> {
+    private class ImageCompressionAsyncTask extends AsyncTask<String, Void, String> {
         private boolean fromGallery;
         private ProgressDialog pd;
 
@@ -706,7 +784,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             super.onPostExecute(result);
 
             if (result == null) {
-                utils.displayAlert(context,res.getString(R.string.error), getString(R.string.not_valid_photo));
+                utils.displayAlert(context, res.getString(R.string.error), getString(R.string.not_valid_photo));
                 pd.dismiss();
                 return;
             }
@@ -716,6 +794,6 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
             setPic(logo, selectedImagePath);
             pd.dismiss();
         }
-   }
+    }
 
 }
