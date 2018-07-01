@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.android.therevgo.R;
 import com.client.therevgo.activities.MainActivity;
+import com.client.therevgo.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by shubham on 31/10/16.
  */
 
-public class ShowFollowUpContainerFragment extends Fragment {
+public class ShowFollowUpContainerFragment extends BaseFragment {
 
     public static final String TAG = ShowFollowUpContainerFragment.class.getName();
 
@@ -78,6 +79,11 @@ public class ShowFollowUpContainerFragment extends Fragment {
         adapter.AddData(new CustomDateFilterFollowUpFragment() , "All");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Show Follow Up";
     }
 
     private class ViewpagerAdater extends FragmentStatePagerAdapter {

@@ -8,14 +8,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.android.therevgo.R;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.utility.Utils;
 
-public class SmsPlanFragment extends Fragment {
+public class SmsPlanFragment extends BaseFragment {
 
     public static final String TAG = SmsPlanFragment.class.getName();
 
     public SmsPlanFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "SMS Plans";
     }
 
     @Override

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContainerActivity;
 import com.client.therevgo.adapters.BusinessDealAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.dto.BusinessDealDTO;
 import com.client.therevgo.dto.ListStatusDTO;
 import com.client.therevgo.networks.HttpConnection;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BusinessDealFragment extends Fragment implements ResponseListener {
+public class BusinessDealFragment extends BaseFragment implements ResponseListener {
 
     public static final String TAG = BusinessDealFragment.class.getName();
     private EditText et_deal_in;
@@ -67,6 +68,11 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
         // Required empty public constructor
     }
 
+    @Override
+    protected String getTitle() {
+        return "Keywords";
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +83,7 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
         context = getActivity();
 
         activity = (ContainerActivity) context;
-        activity.setTitle("Update Keyword");
+        activity.setTitle("Keywords");
 
         user_id = (String) PrefManager.getInstance(context).getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
 
@@ -237,7 +243,7 @@ public class BusinessDealFragment extends Fragment implements ResponseListener {
                 case R.id.btn_live_deals:
                     String msg, btnText ;
                     if (BusinessContactInfoFragment.LIVE_STATUS.equals("Y")) {
-                        msg = "You list will be suspended.";
+                        msg = "Business Listing Un-Live Successfully";//"You list will be suspended.";
                         btnText = "UNLIVE";
                     } else {
                         msg = "We will live your list with in 48 hours";

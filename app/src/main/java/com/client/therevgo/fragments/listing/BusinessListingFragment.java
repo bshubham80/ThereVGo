@@ -1,6 +1,5 @@
 package com.client.therevgo.fragments.listing;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,13 +14,14 @@ import android.widget.GridView;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContainerActivity;
 import com.client.therevgo.adapters.ServiceAdapter;
+import com.client.therevgo.base.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BusinessListingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BusinessListingFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class BusinessListingFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
     public static final String TAG = BusinessListingFragment.class.getName();
 
@@ -36,9 +36,13 @@ public class BusinessListingFragment extends Fragment implements AdapterView.OnI
 
     private Context context ;
 
-
     public BusinessListingFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Listing";
     }
 
     /**

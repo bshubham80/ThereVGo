@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContactActivity;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.database.AppDb;
 import com.client.therevgo.database.ContactBean;
 import com.client.therevgo.database.ContactTable;
@@ -49,7 +50,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Vector;
 
-public class SendSmsFragment extends Fragment implements ResponseListener, ContactActivity.ContactListener {
+public class SendSmsFragment extends BaseFragment
+        implements ResponseListener, ContactActivity.ContactListener {
 
     public static final String TAG = SendSmsFragment.class.getName();
 
@@ -508,6 +510,11 @@ public class SendSmsFragment extends Fragment implements ResponseListener, Conta
                 }
             }, DELETE_MINUTE);
         }
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Bulk Sms";
     }
 
     private class MyClickListener implements View.OnClickListener {

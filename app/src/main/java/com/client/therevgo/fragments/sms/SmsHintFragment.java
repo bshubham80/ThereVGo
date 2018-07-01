@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.dto.SubSmsType;
 import com.client.therevgo.networks.HttpConnection;
@@ -35,7 +36,7 @@ import java.util.List;
 /**
  * Created by shubham on 27/7/16.
  */
-public class SmsHintFragment extends Fragment implements ResponseListener {
+public class SmsHintFragment extends BaseFragment implements ResponseListener {
 
     public static final String TAG = SmsHintFragment.class.getName();
 
@@ -213,6 +214,11 @@ public class SmsHintFragment extends Fragment implements ResponseListener {
     private void intializeList(){
         MessageID = new ArrayList<>();
         MessageText = new ArrayList<>();
+    }
+
+    @Override
+    protected String getTitle() {
+        return "SMS Hint";
     }
 
     private class MyCLickListener implements View.OnClickListener {

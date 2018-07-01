@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.adapters.SavedSmsAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.dto.SavedSmsModel;
 import com.client.therevgo.library.SaveSmsLib;
@@ -38,7 +39,7 @@ import java.util.Iterator;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SavedSmsFragment extends Fragment {
+public class SavedSmsFragment extends BaseFragment {
 
     public static final String TAG = SavedSmsFragment.class.getName();
 
@@ -61,6 +62,11 @@ public class SavedSmsFragment extends Fragment {
 
     public SavedSmsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Edit SMS";
     }
 
     @Override

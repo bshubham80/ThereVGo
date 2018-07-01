@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.MainActivity;
 import com.client.therevgo.adapters.GroupAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.database.AppDb;
 import com.client.therevgo.database.GroupBean;
 import com.client.therevgo.database.GroupTable;
@@ -31,7 +32,8 @@ import java.util.Vector;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupContainerFragment extends Fragment implements GroupAdapter.OnGroupEditListener {
+public class GroupContainerFragment extends BaseFragment
+        implements GroupAdapter.OnGroupEditListener {
 
     public static final String TAG = GroupContainerFragment.class.getName();
     private View view;
@@ -51,6 +53,11 @@ public class GroupContainerFragment extends Fragment implements GroupAdapter.OnG
 
     public GroupContainerFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Group";
     }
 
     @Override

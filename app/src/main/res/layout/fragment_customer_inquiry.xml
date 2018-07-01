@@ -34,7 +34,7 @@
         android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Client"
+        android:hint="Select User"
         android:id="@+id/client"
         android:gravity="start|center"
         android:layout_margin="@dimen/mini_padding"
@@ -54,5 +54,18 @@
         android:id="@+id/customerList"
         android:layout_marginTop="8dp"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/emptyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="@dimen/activity_card_margin"
+        android:text="To know the
+result of same date customer enquiry select only User and Click on Search button"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

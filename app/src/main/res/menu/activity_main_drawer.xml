@@ -4,7 +4,7 @@
         <item
             android:id="@+id/nav_customer_inquiry"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-            android:title="Customer Inquiry" />
+            android:title="Customer Enquiry" />
         <item
             android:id="@+id/nav_show_follow_up"
             android:icon="@drawable/ic_menu_business"

@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.MainActivity;
 import com.client.therevgo.adapters.InquiryAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.dto.InquiryModel;
 import com.client.therevgo.fragments.sms.SmsContainerFragment;
@@ -55,7 +56,8 @@ import static com.client.therevgo.fragments.followUp.CustomDateFilterFollowUpFra
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CustomerInquiry extends Fragment implements ResponseListener, DatePickerDialog.OnDateSetListener {
+public class CustomerInquiry extends BaseFragment
+        implements ResponseListener, DatePickerDialog.OnDateSetListener {
 
     public static final String TAG = "CustomerInquiry";
 
@@ -89,9 +91,13 @@ public class CustomerInquiry extends Fragment implements ResponseListener, DateP
     private InquiryAdapter inquiryAdapter;
     private boolean isSelectAll = false;
 
-
     public CustomerInquiry() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Customer Enquiry";
     }
 
 
@@ -192,6 +198,18 @@ public class CustomerInquiry extends Fragment implements ResponseListener, DateP
         setListener();
 
         getMyClient();
+
+        inquiryList.setEmptyView(view.findViewById(R.id.emptyText));
+        Calendar c = Calendar.getInstance();
+        final int year = c.get(Calendar.YEAR);
+        final int month = c.get(Calendar.MONTH);
+        final int date = c.get(Calendar.DATE);
+        fromDate.setText(new StringBuilder().append(year).append("/")
+                .append(month + 1).append("/").append(date));
+        toDate.setText(new StringBuilder().append(year).append("/")
+                .append(month + 1).append("/").append(date));
+
+     /*   search_btn.callOnClick();*/
     }
 
     private void intializeList() {
@@ -405,7 +423,7 @@ public class CustomerInquiry extends Fragment implements ResponseListener, DateP
                     break;
 
                 case R.id.client:
-                    selectDropDown(context, "Client", client, MessageText);
+                    selectDropDown(context, "User", client, MessageText);
                     break;
 
                 case R.id.btn_search_customer:

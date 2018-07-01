@@ -15,11 +15,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -33,7 +31,6 @@ import com.client.therevgo.fragments.sms.SendSmsFragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -46,19 +43,15 @@ public class ContactActivity extends AppCompatActivity {
     ListView listView;
     // Cursor to load contacts list
     Cursor phones;
-    ContactListener mListener ;
-
-    private ArrayList<String> phoneList = new ArrayList<>();
-
-    @SuppressLint("UseSparseArrays")
-    private HashMap<Integer,Integer> hashMap = new HashMap<>();
-
+    ContactListener mListener;
     // Pop up
     ContentResolver resolver;
     SearchView search;
     SelectUserAdapter adapter;
-
-    private boolean isSelectAll = false ;
+    private ArrayList<String> phoneList = new ArrayList<>();
+    @SuppressLint("UseSparseArrays")
+    private HashMap<Integer, Integer> hashMap = new HashMap<>();
+    private boolean isSelectAll = false;
     private ProgressDialog dialog;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -71,22 +64,25 @@ public class ContactActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        dialog = new ProgressDialog(this) ;
+        dialog = new ProgressDialog(this);
         dialog.setMessage("Please Wait.....");
         dialog.setCancelable(false);
         dialog.dismiss();
 
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(getDrawable(R.drawable.ic_check_white_24dp));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         selectUsers = new ArrayList<>();
         resolver = this.getContentResolver();
         listView = (ListView) findViewById(R.id.contacts_list);
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+        //listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+        //listView.setTextFilterEnabled(true);
 
-        search  = (SearchView) findViewById(R.id.searchView);
-        if( search != null) {
+
+        search = (SearchView) findViewById(R.id.searchView);
+        if (search != null) {
             search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -104,12 +100,12 @@ public class ContactActivity extends AppCompatActivity {
             });
         }
 
-        Bundle bundle = getIntent().getExtras() ;
+        Bundle bundle = getIntent().getExtras();
         int instance = bundle.getInt(INSTANCE);
         if (instance == GROUPCONTACT) {
-            mListener = GroupsContactFragment.instance ;
+            mListener = GroupsContactFragment.instance;
         } else {
-            mListener = SendSmsFragment.instance ;
+            mListener = SendSmsFragment.instance;
         }
 
         phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -119,15 +115,40 @@ public class ContactActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.contact_action, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // I do not want this...
                 // Home as up button is to navigate to Home-Activity not previous acitivity
+                HashMap<String, String> phoneMap = adapter.getCheckedItems();
+                mListener.onContactListFound(ContactActivity.this, phoneMap);
+                Log.i("Size", "onOptionsItemSelected: "+phoneMap.size());
                 super.onBackPressed();
+                return true;
+
+            case R.id.select_all:
+                for (int i = 0; i <= adapter.getCount()-1 ; i++) {
+                    adapter.setSelectedItem(i);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        phones.close();
+    }
+
+    public interface ContactListener {
+        void onContactListFound(ContactActivity activity, HashMap<String, String> ContactList);
     }
 
     // Load data on background
@@ -158,16 +179,16 @@ public class ContactActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    if(!hashMap.containsKey(Integer.parseInt(id))) {
+                    if (!hashMap.containsKey(Integer.parseInt(id))) {
                         SelectUser selectUser = new SelectUser();
                         selectUser.setThumb(bit_thumb);
                         selectUser.setName(name);
-                        phoneNumber = phoneNumber.contains(" ") ? phoneNumber.replaceAll("\\s+","") : phoneNumber ;
+                        phoneNumber = phoneNumber.contains(" ") ? phoneNumber.replaceAll("\\s+", "") : phoneNumber;
                         selectUser.setPhone(phoneNumber);
                         selectUser.setEmail(id);
                         selectUser.setCheckedBox(false);
                         selectUsers.add(selectUser);
-                        hashMap.put(Integer.parseInt(id), Integer.parseInt(id)) ;
+                        hashMap.put(Integer.parseInt(id), Integer.parseInt(id));
                     }
                 }
             } else {
@@ -184,93 +205,13 @@ public class ContactActivity extends AppCompatActivity {
             if (list.size() == 0) {
                 Toast.makeText(ContactActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
             }
-            adapter =  new SelectUserAdapter(list, ContactActivity.this);
+            adapter = new SelectUserAdapter(list, ContactActivity.this);
             listView.setAdapter(adapter);
             if (dialog != null)
                 dialog.dismiss();
 
-            listView.setFastScrollEnabled(true);
-            addMultiChoice();
+           // listView.setFastScrollEnabled(true);
+            //addMultiChoice();
         }
-    }
-
-    private void addMultiChoice() {
-
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-
-                    if(checked) {
-                        adapter.setSelectedItem(position, true);
-                        mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                    } else {
-                        adapter.removeSelectedItem(position, false);
-                        mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                    }
-
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater inflater = getMenuInflater();
-                inflater.inflate(R.menu.contact_action,menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                int id = item.getItemId();
-                switch (id){
-                    case R.id.send:
-                        HashMap<String,String> phoneMap = adapter.getCheckedItems() ;
-                        mListener.onContactListFound(ContactActivity.this,phoneMap);
-                    return true;
-
-                    case R.id.select_all:
-                        if(!isSelectAll) {
-                            for (int i = 0; i <= adapter.getCount() - 1; i++) {
-                                adapter.setSelectedItem(i, true);
-                            }
-                            mode.setTitle(adapter.getSelectedItemSize() + " Selected");
-                            isSelectAll = true ;
-                        }else {
-                            Toast.makeText(ContactActivity.this, "Already Selected", Toast.LENGTH_SHORT).show();
-                        }
-                    return true ;
-
-                    default:
-                    return false ;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                //mode.finish();
-                adapter.clearSelectedList();
-                isSelectAll = false ;
-                if(phoneList.size() > 0) {
-                    phoneList.clear();
-                }
-            }
-        });
-
-    }
-
-    public interface ContactListener {
-         void onContactListFound(ContactActivity activity, HashMap<String, String> ContactList);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        phones.close();
     }
 }

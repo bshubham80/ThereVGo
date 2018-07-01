@@ -46,7 +46,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/colorPrimary"
                         android:textAllCaps="true"
-                        android:text="Send SMS"
+                        android:text="Bulk SMS"
                         android:gravity="center"/>
 
 

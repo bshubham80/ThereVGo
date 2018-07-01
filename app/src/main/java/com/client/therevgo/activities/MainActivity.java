@@ -45,10 +45,6 @@ public class MainActivity extends AppCompatActivity implements
 
         PrefManager prefManager = PrefManager.getInstance(this);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setIcon(R.drawable.logo);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,7 +68,10 @@ public class MainActivity extends AppCompatActivity implements
         txt_email.setText(email);
 
         attachFragment(BusinessListingFragment.newInstance("", ""), BusinessListingFragment.TAG);
+    }
 
+    public Toolbar getToolbar() {
+        return toolbar;
     }
 
     @Override

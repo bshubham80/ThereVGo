@@ -5,6 +5,7 @@
 
     <item android:id="@+id/send"
         android:title="@string/action_send"
+        android:visible="false"
         android:icon="@drawable/ic_menu_send_white"
         app:showAsAction="ifRoom"/>
 
@@ -12,6 +13,6 @@
     <item
         android:id="@+id/select_all"
         android:title="@string/action_select_all"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 
 </menu>

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContainerActivity;
 import com.client.therevgo.adapters.BusinessAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.dto.BusinessProfileModel;
 import com.client.therevgo.networks.HttpConnection;
 import com.client.therevgo.networks.ResponseListener;
@@ -34,7 +35,7 @@ import org.json.JSONObject;
  * Use the {@link BusinessListViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BusinessListViewFragment extends Fragment implements ResponseListener,
+public class BusinessListViewFragment extends BaseFragment implements ResponseListener,
                 AdapterView.OnItemClickListener {
 
     public static final String TAG = BusinessListViewFragment.class.getSimpleName();
@@ -137,6 +138,11 @@ public class BusinessListViewFragment extends Fragment implements ResponseListen
     public void onResume() {
         super.onResume();
         startNetwork();
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Listing";
     }
 
     public void startNetwork() {

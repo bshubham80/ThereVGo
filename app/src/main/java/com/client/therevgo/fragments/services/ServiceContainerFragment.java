@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.adapters.ServiceAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.fragments.followUp.CreateFollowUpFragment;
 import com.client.therevgo.fragments.services.adapter.ServiceGridAdapter;
@@ -37,7 +38,7 @@ import static com.client.therevgo.networks.HttpConnection.RequestPost;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ServiceContainerFragment extends Fragment
+public class ServiceContainerFragment extends BaseFragment
         implements AdapterView.OnItemClickListener, View.OnClickListener, ResponseListener {
 
     public static final String TAG = "ServiceContainerFragment";
@@ -61,6 +62,11 @@ public class ServiceContainerFragment extends Fragment
 
     public ServiceContainerFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Services";
     }
 
 

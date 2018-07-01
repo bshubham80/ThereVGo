@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +46,7 @@ import com.client.therevgo.dto.BusinessImageModel;
 import com.client.therevgo.dto.DialogBean;
 import com.client.therevgo.library.ImageLoader;
 import com.client.therevgo.networks.HttpConnection;
+import com.client.therevgo.networks.OkHttpClientConnectivity;
 import com.client.therevgo.networks.ResponseListener;
 import com.client.therevgo.utility.PrefManager;
 import com.client.therevgo.utility.Utils;
@@ -66,6 +66,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 
@@ -262,6 +263,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                     fetchingData = true;
                     dialog.show();
                     HttpConnection.RequestGet(url, BusinessLogoFragment.this);
+
                 }
             });
         }
@@ -286,9 +288,9 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                     } else {
                         onError(resObj.error);
                     }*/
+                    HttpConnection.RequestGet(url, BusinessLogoFragment.this);
                     fetchingData = true;
                     dialog.show();
-                    HttpConnection.RequestGet(url, BusinessLogoFragment.this);
                 }
             });
         }
@@ -306,7 +308,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
     }
 
     private void loadLogo(String imageURL) {
-        Glide.with(context).load(imageURL).into(logo);
+        Glide.with(context).load(imageURL).placeholder(R.drawable.ic_image_black_24dp).into(logo);
     }
 
     public void intentForCapturingImage() {
@@ -538,7 +540,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
     }
 
     private void uploadImage() {
-        ContentBody cbFile = new FileBody(uploadableFile);
+        /*ContentBody cbFile = new FileBody(uploadableFile);
 
         MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
         entityBuilder.addTextBody("userid", user_id, ContentType.DEFAULT_TEXT);
@@ -546,7 +548,37 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         entityBuilder.addTextBody("con_id", String.valueOf(con_id), ContentType.DEFAULT_TEXT);
 
         String url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS";
-        HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);
+        HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);*/
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("userid", user_id);
+                map.put("con_id", String.valueOf(con_id));
+
+                ArrayList<String> mPicture = new ArrayList<>();
+                mPicture.add(uploadableFile.getPath());
+
+                final JSONObject jsonObject =
+                        OkHttpClientConnectivity.doPostRequestWithFile(map,
+                                "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS", mPicture, "image_name");
+
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Log.e("Response", jsonObject.toString());
+
+                        onResponse(200, jsonObject);
+                    }
+                });
+            }
+        }).start();
+
     }
 
     public RequestQueue getRequestQueue() {
@@ -624,7 +656,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               dialog.dismiss();
+                dialog.dismiss();
             }
         });
         builder.show();
@@ -647,27 +679,27 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                         fragment.setArguments(bundle);
                         containerActivity.attachFragment(fragment, BusinessDealFragment.TAG);
                     } else {
-                        showInfoDialog();
-                        /*insertingData = true;
+                        //showInfoDialog();
+                        insertingData = true;
 
                         dialog.show();
 
-                        uploadImage();*/
+                        uploadImage();
                     }
                     break;
 
                 case R.id.btn_update:
-                    showInfoDialog();
-                    /*updatingData = true;
+                    /*showInfoDialog();*/
+                    updatingData = true;
 
                     dialog.show();
 
-                    uploadImage();*/
+                    uploadImage();
                     break;
 
                 case R.id.btn_upload:
-                    showInfoDialog();
-                    /*intentForCapturingImage();*/
+                    // showInfoDialog();
+                    intentForCapturingImage();
                     break;
             }
         }

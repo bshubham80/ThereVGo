@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.networks.ResponseListener;
 import com.client.therevgo.utility.PrefManager;
@@ -32,7 +33,7 @@ import java.util.regex.Pattern;
 
 import static com.client.therevgo.networks.HttpConnection.RequestPost;
 
-public class CreateFollowUpFragment extends Fragment implements ResponseListener {
+public class CreateFollowUpFragment extends BaseFragment implements ResponseListener {
 
     public static final String TAG = CreateFollowUpFragment.class.getName();
 
@@ -211,6 +212,11 @@ public class CreateFollowUpFragment extends Fragment implements ResponseListener
         follow_date.setText("");
         follow_area.setText("");
         follow_city.setText("");
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Create Follow Up";
     }
 
     private class MyDateListener implements DatePickerDialog.OnDateSetListener {

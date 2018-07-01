@@ -15,13 +15,14 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContainerActivity;
 import com.client.therevgo.activities.MainActivity;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.fragments.group.GroupContainerFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SmsContainerFragment extends Fragment {
+public class SmsContainerFragment extends BaseFragment {
 
     public static final String TAG = SmsContainerFragment.class.getName();
     private static final String ARG_SHOW_SEND_SMS = "arg_show_sms" ;
@@ -30,7 +31,7 @@ public class SmsContainerFragment extends Fragment {
     private View view;
     private Context context;
     private CardView sendSMSCard, smsHintCard, manageGroupCard, mySMSCard,
-                     leadCard, planCard ;
+            leadCard, planCard ;
 
     private MainActivity activity;
 
@@ -75,6 +76,11 @@ public class SmsContainerFragment extends Fragment {
         return view;
     }
 
+    @Override
+    protected String getTitle() {
+        return "SMS Dashboard";
+    }
+
     private void findViewById() {
         sendSMSCard = (CardView) view.findViewById(R.id.send_sms_card);
         smsHintCard = (CardView) view.findViewById(R.id.sms_hint_card);
@@ -102,28 +108,28 @@ public class SmsContainerFragment extends Fragment {
             switch (id) {
                 case R.id.send_sms_card:
                     activity.attachFragment(new SendSmsFragment(), SendSmsFragment.TAG);
-                break;
+                    break;
 
                 case R.id.sms_hint_card:
                     activity.attachFragment(new SmsHintFragment(), SmsHintFragment.TAG);
-                break;
+                    break;
 
                 case R.id.manage_group_card:
                     activity.attachFragment(new GroupContainerFragment(), GroupContainerFragment.TAG);
-                break;
+                    break;
 
                 case R.id.my_sms_card:
                     activity.attachFragment(new SavedSmsFragment(), SavedSmsFragment.TAG);
-                break;
+                    break;
 
                 case R.id.business_lead_card:
                     //Toast.makeText(context, "Delivery Report will coming soon", Toast.LENGTH_SHORT).show();
                     attachWebViewFragment("Delivery Report", "http://bulksms.therevgo.com");
-                break;
+                    break;
 
                 case R.id.plan_card:
                     activity.attachFragment(new SmsPlanFragment(), SmsPlanFragment.TAG);
-                break;
+                    break;
             }
         }
     }
