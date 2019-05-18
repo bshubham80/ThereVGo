@@ -33,7 +33,7 @@
             android:name="com.client.therevgo.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="stateHidden"
             />
         <activity
             android:name="com.client.therevgo.activities.LoginActivity"
