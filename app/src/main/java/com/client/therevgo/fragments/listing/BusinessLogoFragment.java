@@ -550,6 +550,11 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         String url = "http://tapi.therevgo.in/api/BusinessImgListing/BUSImgINS";
         HttpConnection.uploadFile(url, entityBuilder, BusinessLogoFragment.this);*/
 
+        if (uploadableFile == null) {
+            utils.displayAlert(context, res.getString(R.string.error), "Please select valid photo");
+            dialog.cancel();
+            return ;
+        }
 
         new Thread(new Runnable() {
             @Override

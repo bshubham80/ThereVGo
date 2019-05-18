@@ -72,7 +72,7 @@ public class ContactTable {
         }
 
         if (returnValue > 0l) {
-            return dateTime_Millis;
+            return (int) returnValue;
         } else {
             return 0;
         }

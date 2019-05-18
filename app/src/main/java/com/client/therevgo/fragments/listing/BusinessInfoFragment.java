@@ -1,6 +1,7 @@
 package com.client.therevgo.fragments.listing;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
@@ -66,7 +67,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
     //define views
     private EditText et_company_name, et_company_type, et_option,
                      et_category, et_subcategory,et_business_name,
-                        et_business_date, et_website;
+                        et_business_date; //, et_website;
     private EditText et_area,et_city, et_pincode, et_state, et_country;
 
 
@@ -110,31 +111,31 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
 
         user_id = (String) PrefManager.getInstance(context).getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
 
-        et_company_name = (EditText)  view.findViewById(R.id.et_com_name);
+        et_company_name = view.findViewById(R.id.et_com_name);
 
-        et_option = (EditText)  view.findViewById(R.id.et_option);
-        et_category = (EditText)  view.findViewById(R.id.et_category);
-        et_subcategory = (EditText)  view.findViewById(R.id.et_sub_category);
+        et_option = view.findViewById(R.id.et_option);
+        et_category = view.findViewById(R.id.et_category);
+        et_subcategory = view.findViewById(R.id.et_sub_category);
 
         et_option.setOnClickListener(new MyClickListener());
         et_category.setOnClickListener(new MyClickListener());
         et_subcategory.setOnClickListener(new MyClickListener());
 
-        et_business_name = (EditText) view.findViewById(R.id.et_business_name);
+        et_business_name = view.findViewById(R.id.et_business_name);
 
-        et_business_date = (EditText) view.findViewById(R.id.et_business_date);
+        et_business_date = view.findViewById(R.id.et_business_date);
         et_business_date.setOnClickListener(new MyClickListener());
 
-        et_website = (EditText) view.findViewById(R.id.et_website);
+        // et_website = (EditText) view.findViewById(R.id.et_website);
         
         //area views 
-        et_area = (EditText) view.findViewById(R.id.et_area);
-        et_city = (EditText) view.findViewById(R.id.et_city);
-        et_pincode = (EditText) view.findViewById(R.id.et_pin_code);
-        et_state = (EditText) view.findViewById(R.id.et_state);
-        et_country = (EditText) view.findViewById(R.id.et_country);
+        et_area = view.findViewById(R.id.et_area);
+        et_city = view.findViewById(R.id.et_city);
+        et_pincode = view.findViewById(R.id.et_pin_code);
+        et_state = view.findViewById(R.id.et_state);
+        et_country = view.findViewById(R.id.et_country);
 
-        spinner_com_type = (Spinner)view.findViewById(R.id.spine_com_type);
+        spinner_com_type = view.findViewById(R.id.spine_com_type);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_spinner_item,paths);
 
@@ -145,8 +146,8 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         dialog.setMessage("Please Wait");
         dialog.setCancelable(false);
 
-        btn_submit = (Button) view.findViewById(R.id.btn_submit);
-        btn_update = (Button) view.findViewById(R.id.btn_update);
+        btn_submit = view.findViewById(R.id.btn_submit);
+        btn_update = view.findViewById(R.id.btn_update);
 
         et_state.setOnClickListener(new MyClickListener());
         et_country.setOnClickListener(new MyClickListener());
@@ -530,6 +531,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
     private class MyDateListener implements DatePickerDialog.OnDateSetListener {
 
         @Override
+        @SuppressLint("SetTextI18n")
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             monthOfYear = monthOfYear + 1;
 
@@ -572,9 +574,9 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         if (!utils.validateView(containerActivity, et_business_date, "Enter Business Start Date")) {
             return false;
         }
-        if (!utils.validateView(containerActivity, et_website, "Enter Website URL")) {
+       /* if (!utils.validateView(containerActivity, et_website, "Enter Website URL")) {
             return false;
-        }
+        }*/
 
        
 
@@ -591,10 +593,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         if (!utils.validateView(containerActivity, et_country, "Enter Country Name")) {
             return false;
         }
-        if (!utils.validateView(containerActivity, et_state, "Enter State Name")) {
-            return false;
-        }
-        return true ;
+        return utils.validateView(containerActivity, et_state, "Enter State Name");
     }
 
     private void insertValues(){
@@ -613,7 +612,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
                 "&bussiness_name="+ et_business_name.getText().toString()+
                 "&bussiness_date="+ et_business_date.getText().toString()+
                 "&bussiness_type="+ spinner_com_type.getSelectedItem().toString()+
-                "&website="+        et_website.getText().toString()+
+                // "&website="+        et_website.getText().toString()+
                 "&area="+           et_area.getText().toString()+
                 "&city="+           et_city.getText().toString()+
                 "&pincode="+        et_pincode.getText().toString()+
@@ -642,7 +641,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         map.add(new BasicNameValuePair("bussiness_date", et_business_date.getText().toString()));
         map.add(new BasicNameValuePair("bussiness_type", spinner_com_type.getSelectedItem().toString()));
 
-        map.add(new BasicNameValuePair("website", et_website.getText().toString()));
+        // map.add(new BasicNameValuePair("website", et_website.getText().toString()));
 
         map.add(new BasicNameValuePair("option_id", ""+optionID));
         map.add(new BasicNameValuePair("categoryid", ""+productID));
@@ -689,7 +688,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         et_business_name.setText(data.bussiness_name);
         et_business_date.setText(data.bussiness_date);
 
-        et_website.setText(data.website);
+        // et_website.setText(data.website);
 
         et_area.setText(data.area);
         et_city.setText(data.city);
@@ -710,6 +709,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         if(fetchingData) {
             fetchingData = false;
             handler.post(new Runnable() {
+                @SuppressLint("SetTextI18n")
                 @Override
                 public void run() {
                     if (resObj.error == null) {
@@ -795,7 +795,7 @@ public class BusinessInfoFragment extends Fragment implements ResponseListener {
         et_business_name.setText("");
         et_business_date.setText("");
 
-        et_website.setText("");
+        // et_website.setText("");
         et_area.setText("");
         et_city.setText("");
         et_pincode.setText("");

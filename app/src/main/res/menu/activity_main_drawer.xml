@@ -3,7 +3,7 @@
     <group>
         <item
             android:id="@+id/nav_customer_inquiry"
-            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+            android:icon="@drawable/ic_room_service_black_24dp"
             android:title="Customer Enquiry" />
         <item
             android:id="@+id/nav_show_follow_up"
@@ -25,8 +25,8 @@
         <item
             android:id="@+id/nav_services"
             android:visible="true"
-            android:icon="@drawable/ic_room_service_black_24dp"
-            android:title="Services" />
+            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+            android:title="Business Listing" />
     </group>
 
     <item android:title="Communicate">

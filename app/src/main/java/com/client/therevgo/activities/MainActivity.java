@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity implements
         txt_name.setText(name);
         txt_email.setText(email);
 
-        attachFragment(BusinessListingFragment.newInstance("", ""), BusinessListingFragment.TAG);
+        // attachFragment(BusinessListingFragment.newInstance("", ""), BusinessListingFragment.TAG);
+        attachFragment(new ServiceContainerFragment(), ServiceContainerFragment.TAG);
     }
 
     public Toolbar getToolbar() {
@@ -157,11 +158,13 @@ public class MainActivity extends AppCompatActivity implements
             fragment = new SmsContainerFragment();
             backStack = SmsContainerFragment.TAG;
 
-        } else if (id == R.id.nav_services) {
-            fragment = new ServiceContainerFragment();
-            backStack = ServiceContainerFragment.TAG;
+        }
+        else if (id == R.id.nav_services) {
+            fragment = BusinessListingFragment.newInstance("", "");
+            backStack = BusinessListingFragment.TAG;
 
-        } else if (id == R.id.nav_call) {
+        }
+        else if (id == R.id.nav_call) {
             Utils.getInstance().makeCall(this);
 
         } else if (id == R.id.nav_aboutus) {

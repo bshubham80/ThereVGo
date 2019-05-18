@@ -42,7 +42,8 @@ import java.util.Vector;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupsContactFragment extends Fragment implements ContactActivity.ContactListener, ContactAdapter.OnItemLongClickListener {
+public class GroupsContactFragment extends Fragment
+        implements ContactActivity.ContactListener, ContactAdapter.OnItemLongClickListener {
 
     public static final String TAG = GroupsContactFragment.class.getName();
 
@@ -153,7 +154,8 @@ public class GroupsContactFragment extends Fragment implements ContactActivity.C
             String name = map.get(key);
 
             ContactBean bean = new ContactBean(0, name, key);
-            contactTable.createContact(bean, mGroupID);
+            int id = contactTable.createContact(bean, mGroupID);
+            bean.setId(id);
             ITEMS.add(bean);
         }
 
@@ -186,7 +188,7 @@ public class GroupsContactFragment extends Fragment implements ContactActivity.C
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int resGroup = contactTable.deleteContact("" + contactID);
+                int resGroup = contactTable.deleteContact(String.valueOf(contactID));
 
                 //get new data from database in list
                 /*Iterator<ContactBean> it = ITEMS.iterator();

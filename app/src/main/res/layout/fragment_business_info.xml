@@ -347,6 +347,7 @@
                 android:layout_height="wrap_content"
                 app:contentPaddingLeft="@dimen/activity_card_margin"
                 app:contentPaddingRight="@dimen/activity_card_margin"
+                android:visibility="gone"
                 style="@style/CardViewStyle">
 
                 <LinearLayout

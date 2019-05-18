@@ -17,7 +17,11 @@ public class ContactBean {
         return id;
     }
 
-    public String getName() {
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
 		return name;
 	}
 
