@@ -69,7 +69,7 @@ public class BusinessDealFragment extends BaseFragment implements ResponseListen
     }
 
     @Override
-    protected String getTitle() {
+    public String getTitle() {
         return "Keywords";
     }
 
@@ -145,7 +145,7 @@ public class BusinessDealFragment extends BaseFragment implements ResponseListen
                           //Utils.showToast(context, resObj.message);
                           et_deal_in.setText("");
                           
-                          if (resObj.Data.size() > 6){
+                          if (resObj.Data != null && resObj.Data.size() >= 6){
                               btn_submit.setText("Only 6 keywords allowed for a business");
                               btn_submit.setEnabled(false);
                           }
@@ -170,7 +170,7 @@ public class BusinessDealFragment extends BaseFragment implements ResponseListen
                         if (resObj.Data != null && resObj.Data.size() > 0) {
                             adapter = new BusinessDealAdapter(context, R.layout.business_list_layout, resObj.Data, BusinessDealFragment.this);
                             list_deal.setAdapter(adapter);
-                            if ( resObj.Data.size() > 6){
+                            if ( resObj.Data.size() >= 6){
                                 btn_submit.setText("Only 6 keywords allowed for a business");
                                 btn_submit.setEnabled(false);
                             }

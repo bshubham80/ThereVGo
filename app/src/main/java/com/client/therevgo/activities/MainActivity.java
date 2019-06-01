@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.fragments.followUp.ShowFollowUpContainerFragment;
 import com.client.therevgo.fragments.inquiry.CustomerInquiry;
 import com.client.therevgo.fragments.listing.BusinessListingFragment;
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        Fragment fragment = null;
+        BaseFragment fragment = null;
         String backStack = null;
 
         if (id == R.id.nav_customer_inquiry) {
@@ -204,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction.replace(R.id.fragmentContainer, fragment);
+//        if (fragment.getTitle() != null) {
+//            setTitle(fragment.getTitle());
+//            // getSupportActionBar().setTitle(fragment.getTitle());
+//        }
         if (fragmentManager.getBackStackEntryCount() > 1){
             fragmentManager.popBackStack();
         }

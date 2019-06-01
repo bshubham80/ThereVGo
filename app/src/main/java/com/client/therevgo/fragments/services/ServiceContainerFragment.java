@@ -66,7 +66,7 @@ public class ServiceContainerFragment extends BaseFragment
 
     @Override
     protected String getTitle() {
-        return "Services";
+        return "Enquiry Form";
     }
 
 
@@ -131,10 +131,10 @@ public class ServiceContainerFragment extends BaseFragment
      */
     @Override
     public void onClick(View v) {
-        if (!utils.validateView(getActivity(), mNameText, getString(R.string.err_msg_name))) {
+        if (!utils.validateView(getActivity(), mNameText, "Enter your mobile no")) {
             return;
         }
-        if (!utils.validateView(getActivity(), mEmailText, "Enter Email")) {
+        if (!utils.validateView(getActivity(), mEmailText, "Enter your Email id")) {
             return;
         }
         String user_id = (String) PrefManager.getInstance(getContext())

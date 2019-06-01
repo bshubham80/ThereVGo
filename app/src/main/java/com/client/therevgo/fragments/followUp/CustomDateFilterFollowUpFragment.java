@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.MainActivity;
 import com.client.therevgo.adapters.FollowAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.constants.Config;
 import com.client.therevgo.customviews.DateRangePickerDialog;
 import com.client.therevgo.dto.FollowModel;
@@ -299,7 +300,7 @@ public class CustomDateFilterFollowUpFragment extends Fragment implements Respon
         header.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
     }
 
-    private void changeFragment(Fragment fragment, String stack){
+    private void changeFragment(BaseFragment fragment, String stack){
         //activity.getMyFragmentManager().popBackStack();
         //Immediate(ShowFollowUpContainerFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         //activity.attachFragment(SmsContainerFragment.newInstance(true), SendSmsFragment.TAG);

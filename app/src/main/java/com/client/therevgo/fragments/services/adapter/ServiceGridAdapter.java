@@ -28,22 +28,24 @@ public class ServiceGridAdapter extends BaseAdapter {
 
     // Keep all Images in array
     private Integer[] mThumbIds = {
-            R.drawable.designing, R.drawable.writing,
-            R.drawable.rnd, R.drawable.development,
-            R.drawable.hosting, R.drawable.marketing
+            R.drawable.advertisements, R.drawable.home_services,
+            R.drawable.interior_work, R.drawable.jobs,
+            R.drawable.properties, R.drawable.tiffin_services,
+            R.drawable.tour___travel, R.drawable.securities_services
     };
-    // Keep all Images in array
+    // Keep all text in array
     private String[] mNameIds = {
-            "Designing", "Writing",
-            "RND", "Development",
-            "Hosting", "Marketing"
+            "ADVERTISEMENTS", "HOME SERVICES",
+            "INTERIOR WORKS", "JOBS",
+            "PROPERTY", "TIFFIN SERVICES",
+            "TOUR & TRAVEL", "SECURITIES & SERVICES"
     };
-    // Keep all Images in array
+    // Keep all status in array
     private String[] mLiveIds = {
             "", "Comming Soon",
             "Comming Soon", "Comming Soon"
     };
-    // Keep all Images in array
+
     private String mColorIds = "#FF9CE9BB";
 
 

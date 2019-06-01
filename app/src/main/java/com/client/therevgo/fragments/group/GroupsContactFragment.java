@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.android.therevgo.R;
 import com.client.therevgo.activities.ContactActivity;
 import com.client.therevgo.adapters.ContactAdapter;
+import com.client.therevgo.base.BaseFragment;
 import com.client.therevgo.customviews.RecyclerViewWithEmptyView;
 import com.client.therevgo.database.AppDb;
 import com.client.therevgo.database.ContactBean;
@@ -42,7 +43,7 @@ import java.util.Vector;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GroupsContactFragment extends Fragment
+public class GroupsContactFragment extends BaseFragment
         implements ContactActivity.ContactListener, ContactAdapter.OnItemLongClickListener {
 
     public static final String TAG = GroupsContactFragment.class.getName();
@@ -70,6 +71,11 @@ public class GroupsContactFragment extends Fragment
 
     public GroupsContactFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    protected String getTitle() {
+        return "Add Participants";
     }
 
     public static Fragment newInstance(int id, String name) {

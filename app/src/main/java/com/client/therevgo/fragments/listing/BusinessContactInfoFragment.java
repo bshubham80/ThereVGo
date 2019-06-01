@@ -388,8 +388,8 @@ public class BusinessContactInfoFragment extends Fragment implements ResponseLis
                         if (inserting) {
                             inserting = false;
                             Toast.makeText(context, "Details Entered Successfully", Toast.LENGTH_SHORT).show();
-                            //containerActivity.finish();
-                            changeFragment();
+                            containerActivity.finish();
+                            //changeFragment();
                         }
 
                         if (updating) {
