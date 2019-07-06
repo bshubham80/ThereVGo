@@ -20,6 +20,21 @@ public class LoginModel {
     @SerializedName("Data")
     public List<Data> Data;
 
+    /**
+     *  {
+     * "id": 290,
+     * "name": "Order Status",
+     * "email_id": "odeliverymart@gmail.com",
+     * "mobile_no": "9991482693",
+     * "password": "Yogeshdmart@1",
+     * "status": "Active",
+     * "creation_date": "12 Sep 2018 16:21:48:043",
+     * "user_type": "m",
+     * "msg_id": "DMARTE",
+     * "sms_type": 2,
+     * "mesg_unq_code": "72782"
+     * }
+     */
     public static class Data {
         @SerializedName("id")
         public int id;
@@ -41,5 +56,7 @@ public class LoginModel {
         public String msg_id;
         @SerializedName("sms_type")
         public int sms_type;
+        @SerializedName("mesg_unq_code")
+        public String mesg_unq_code;
     }
 }

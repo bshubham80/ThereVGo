@@ -114,6 +114,7 @@ public class PrefManager {
         public static final String USER_MOBILE = "mobile_no";
         public static final String USER_MSG_ID = "msg_id";
         public static final String SMS_TYPE = "sms_type";
+        public static final String MESSAGE_UNIQUE_CODE = "msg_unique_code";
 
         public static final String USER_SMS_USERNAME = "sms_username";
         public static final String USER_SMS_PASSWORD = "password";

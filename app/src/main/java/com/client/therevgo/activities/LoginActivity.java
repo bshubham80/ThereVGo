@@ -31,6 +31,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class LoginActivity extends AppCompatActivity implements ResponseListener {
 
     private static final long SPLASH_LENGTH = 2000;
@@ -43,20 +45,21 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
             PrefManager.Key.USER_MSG_ID,
             PrefManager.Key.USER_PASSWORD,
             PrefManager.Key.SMS_TYPE,
+            PrefManager.Key.MESSAGE_UNIQUE_CODE,
     };
 
     private boolean showAnimation = true;
 
-    private ProgressDialog dialog ;
+    private ProgressDialog dialog;
     private Handler handler = new Handler();
-    private ImageView logo ;
-    private LinearLayout login ;
+    private ImageView logo;
+    private LinearLayout login;
     private EditText inputEmail, inputPassword;
 
     private Utils utils = Utils.getInstance();
-    private PrefManager prefManager ;
+    private PrefManager prefManager;
 
-    private boolean isFirst = true ;
+    private boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
         logo = (ImageView) findViewById(R.id.logo);
         login = (LinearLayout) findViewById(R.id.fragmentContainer);
 
-        if(getSupportActionBar() != null)
+        if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
         inputEmail = (EditText) findViewById(R.id.input_email);
@@ -102,26 +105,26 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
-        if(hasFocus && isFirst) {
+        if (hasFocus && isFirst) {
             isFirst = false;
-            if(utils.isInternetAvailable(this)) {
+            if (utils.isInternetAvailable(this)) {
                 String user_id = (String)
                         prefManager.getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
 
                 if (!user_id.equals(PrefManager.DEFAULT_STRING) && user_id.length() > 0) {
                     changeFragment();
                 } else {
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (showAnimation) {
-                                startAnimation();
-                                showAnimation = false;
-                            }
-                        }
-                    }, SPLASH_LENGTH);
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (showAnimation) {
+//                                startAnimation();
+//                                showAnimation = false;
+//                            }
+//                        }
+//                    }, SPLASH_LENGTH);
                 }
-            }else{
+            } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("An error occurred while launching app. Please check your internet connection and try again!");
                 builder.setPositiveButton("OK", null);
@@ -141,41 +144,41 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
 
     private void startAnimation() {
         int height = logo.getHeight();
-        float Y_Cor = logo.getY() ;
+        float Y_Cor = logo.getY();
 
         float layoutY = login.getY();
 
-        ObjectAnimator translate = ObjectAnimator.ofFloat(logo,View.Y,Y_Cor,layoutY-height);
+        ObjectAnimator translate = ObjectAnimator.ofFloat(logo, View.Y, Y_Cor, layoutY - height);
         translate.setDuration(1000);
 
-        ObjectAnimator  fadeIn = ObjectAnimator.ofFloat(login,View.ALPHA,0f,1f);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(login, View.ALPHA, 0f, 1f);
         translate.setDuration(1000);
 
-        AnimatorSet set =  new AnimatorSet();
+        AnimatorSet set = new AnimatorSet();
         set.play(translate).before(fadeIn);
         set.start();
     }
 
     //Validating form
     private void submitForm() {
-        if (!utils.validateEmail(this,inputEmail,getString(R.string.err_msg_email))) {
+        if (!utils.validateEmail(this, inputEmail, getString(R.string.err_msg_email))) {
             return;
         }
 
-        if (!utils.validateView(this,inputPassword,getString(R.string.err_msg_password))) {
+        if (!utils.validateView(this, inputPassword, getString(R.string.err_msg_password))) {
             return;
         }
 
-        if(utils.isInternetAvailable(this))
+        if (utils.isInternetAvailable(this))
             sendRequest();
         else
-            Toast.makeText(this, getString(R.string.no_internet_available), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_internet_available), LENGTH_SHORT).show();
     }
 
     private void sendRequest() {
-        String URL = Config.DOMAIN+"api/SignUp?" +
-                "emailid="    + utils.removeWhitSpace(inputEmail.getText().toString()) +
-                "&password="  + inputPassword.getText().toString();
+        String URL = Config.DOMAIN + "api/SignUp?" +
+                "emailid=" + utils.removeWhitSpace(inputEmail.getText().toString()) +
+                "&password=" + inputPassword.getText().toString();
 
         dialog = new ProgressDialog(this);
         dialog.setMessage("Please Wait...");
@@ -183,23 +186,23 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
         dialog.show();
 
         utils.hideKeyboard(this);
-        HttpConnection.RequestGet(URL,LoginActivity.this);
+        HttpConnection.RequestGet(URL, LoginActivity.this);
     }
 
     public void showSignUp(View view) {
-        Intent intent = new Intent(this,SignUpActivity.class);
-        ActivityOptions opt;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            opt = ActivityOptions.makeSceneTransitionAnimation(
-                    this,
-                    new Pair<View, String>(logo,getResources().getString(R.string.logo))
-            );
-            startActivity(intent,opt.toBundle());
-            finish();
-        }else {
+        Intent intent = new Intent(this, SignUpActivity.class);
+//        ActivityOptions opt;
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//            opt = ActivityOptions.makeSceneTransitionAnimation(
+//                    this,
+//                    new Pair<View, String>(logo, getResources().getString(R.string.logo))
+//            );
+//            startActivity(intent, opt.toBundle());
+//            finish();
+//        } else {
             startActivity(intent);
             finish();
-        }
+//        }
     }
 
     @Override
@@ -214,13 +217,14 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
                 if (loginModel.status) {
                     LoginModel.Data data = loginModel.Data.get(0);
                     String[] preferenceValues = {
-                        data.id+"",
-                        data.name,
-                        data.email_id,
-                        data.mobile_no,
-                        data.msg_id,
-                        data.password,
-                        data.sms_type+""
+                            data.id + "",
+                            data.name,
+                            data.email_id,
+                            data.mobile_no,
+                            data.msg_id,
+                            data.password,
+                            data.sms_type + "",
+                            data.mesg_unq_code
                     };
                     prefManager.setDataInPreference(preferenceKey, preferenceValues);
                     handler.post(new Runnable() {
@@ -230,8 +234,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
                         }
                     });
                 } else {
-                    Toast.makeText(LoginActivity.this, loginModel.error,
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, loginModel.error, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -243,13 +246,13 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, msg, LENGTH_SHORT).show();
             }
         });
     }
 
     private void changeFragment() {
-        Intent intent = new Intent(this,MainActivity.class);//DashBoard.class);
+        Intent intent = new Intent(this, MainActivity.class);//DashBoard.class);
         startActivity(intent);
         finish();
     }

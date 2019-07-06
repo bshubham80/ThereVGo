@@ -1,6 +1,7 @@
 package com.client.therevgo.fragments.services;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -82,23 +83,38 @@ public class ServiceContainerFragment extends BaseFragment
         dialog = new ProgressDialog(getContext());
         dialog.setMessage("Please Wait");
         dialog.setCancelable(false);
-        mNameLayout = (TextInputLayout) view.findViewById(R.id.name_layout);
-        mEmailLayout = (TextInputLayout) view.findViewById(R.id.email_layout);
+        mNameLayout = view.findViewById(R.id.name_layout);
+        mEmailLayout = view.findViewById(R.id.email_layout);
 
-        mNameText = (TextInputEditText) view.findViewById(R.id.edittxt_name);
-        mEmailText = (TextInputEditText) view.findViewById(R.id.edittxt_email);
+        mNameText = view.findViewById(R.id.edittxt_name);
+        mEmailText = view.findViewById(R.id.edittxt_email);
 
         mSubmitButton = (Button) view.findViewById(R.id.button_send);
         mSubmitButton.setOnClickListener(this);
 
         GridView gridView = (GridView) view.findViewById(R.id.service_view);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            gridView.setNestedScrollingEnabled(false);
+        }
         adapter = new ServiceGridAdapter(getContext());
 
         // Instance of ImageAdapter Class
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(this);
+
+        String email = (String) PrefManager.getInstance(getContext())
+                .getDataFromPreference(PrefManager.Key.USER_EMAIL, PrefManager.Type.TYPE_STRING);
+        String mobileNo = (String) PrefManager.getInstance(getContext())
+                .getDataFromPreference(PrefManager.Key.USER_MOBILE, PrefManager.Type.TYPE_STRING);
+
+        // set mobile number and selection for the field
+        mNameText.setText(mobileNo);
+        mNameText.setSelection(mobileNo.length());
+
+        // set email and selection for the field
+        mEmailText.setText(email);
+        mEmailText.setSelection(email.length());
     }
 
     /**
@@ -131,10 +147,10 @@ public class ServiceContainerFragment extends BaseFragment
      */
     @Override
     public void onClick(View v) {
-        if (!utils.validateView(getActivity(), mNameText, "Enter your mobile no")) {
+        if (!utils.validateMobile(getActivity(), mNameText, "Enter a valid mobile no")) {
             return;
         }
-        if (!utils.validateView(getActivity(), mEmailText, "Enter your Email id")) {
+        if (!utils.validateEmail(getActivity(), mEmailText, "Enter a valid Email id")) {
             return;
         }
         String user_id = (String) PrefManager.getInstance(getContext())
@@ -189,8 +205,8 @@ public class ServiceContainerFragment extends BaseFragment
     }
 
     private void resetViews() {
-        mNameText.setText(null);
-        mEmailText.setText(null);
+       /*mNameText.setText(null);
+        mEmailText.setText(null);*/
         adapter.resetState();
         adapter.notifyDataSetChanged();
     }

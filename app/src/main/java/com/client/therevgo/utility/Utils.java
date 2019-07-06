@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -142,6 +143,20 @@ public class Utils {
 
         return true;
     }
+
+    //Strings Operations
+    public boolean validateMobile(Activity activity, EditText editText, String ErrorMsg) {
+        String email = editText.getText().toString().trim();
+
+        if (email.isEmpty() || !isValidMobile(email)) {
+            editText.setError(ErrorMsg);
+            requestFocus(activity ,editText);
+            return false;
+        }
+
+        return true;
+    }
+
     
     public boolean validateString(String str, String expr) {
         return Pattern.compile(expr).matcher(str).matches();
@@ -154,6 +169,10 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    private boolean isValidMobile(String email) {
+        return !TextUtils.isEmpty(email) && Patterns.PHONE.matcher(email).matches() && Pattern.matches("[0-9]{10}", email);
     }
 
     private boolean isValidEmail(String email) {

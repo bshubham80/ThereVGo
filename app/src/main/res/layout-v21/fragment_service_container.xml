@@ -1,4 +1,4 @@
-<ScrollView
+<ScrollView 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,7 +25,6 @@
                 android:layout_height="wrap_content"
                 android:hint="Mobile No."
                 android:textSize="15sp"
-                android:inputType="number"
                 android:defaultFocusHighlightEnabled="false" />
 
         </android.support.design.widget.TextInputLayout>
@@ -313,8 +312,7 @@
             android:verticalSpacing="10dp"
             android:layout_below="@id/text_2"
             android:layout_above="@+id/button_send"
-            tools:ignore="NestedScrolling"
-            tools:targetApi="lollipop" />
+            tools:ignore="NestedScrolling" />
 
         <Button
             android:id="@+id/button_send"
