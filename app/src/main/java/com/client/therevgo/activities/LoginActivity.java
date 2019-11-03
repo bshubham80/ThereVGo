@@ -234,7 +234,7 @@ public class LoginActivity extends AppCompatActivity implements ResponseListener
                         }
                     });
                 } else {
-                    Toast.makeText(LoginActivity.this, loginModel.error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "Invalid Email/Password", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.therevgo.R;
@@ -50,6 +51,7 @@ public class ServiceContainerFragment extends BaseFragment
     private TextInputEditText mNameText;
     private TextInputEditText mEmailText;
 
+    private TextView mSelectedTextView;
     private GridView mServiceView;
 
     private Button mSubmitButton;
@@ -83,6 +85,8 @@ public class ServiceContainerFragment extends BaseFragment
         dialog = new ProgressDialog(getContext());
         dialog.setMessage("Please Wait");
         dialog.setCancelable(false);
+        mSelectedTextView = view.findViewById(R.id.text_2);
+
         mNameLayout = view.findViewById(R.id.name_layout);
         mEmailLayout = view.findViewById(R.id.email_layout);
 
@@ -138,6 +142,22 @@ public class ServiceContainerFragment extends BaseFragment
         adapter.notifyDataSetChanged();
 
         // Toast.makeText(getContext(), ""+position, Toast.LENGTH_SHORT).show();
+        invalidateSelectedText();
+    }
+
+    private void invalidateSelectedText() {
+
+        String text = getResources()
+                .getQuantityString(R.plurals.select_service, adapter.getSelectedServiceCount(), adapter.getSelectedServiceCount());
+        if (adapter.getSelectedServiceCount() == 0) {
+            text = "Select Services";
+        }
+        mSelectedTextView.setText(text);
+//        if (adapter.getSelectedServiceCount() < 1) {
+//            mSelectedTextView.setText("Select Services");
+//        } else {
+//            mSelectedTextView.setText(String.format("%d Service Selected", adapter.getSelectedServiceCount()));
+//        }
     }
 
     /**
@@ -151,6 +171,10 @@ public class ServiceContainerFragment extends BaseFragment
             return;
         }
         if (!utils.validateEmail(getActivity(), mEmailText, "Enter a valid Email id")) {
+            return;
+        }
+        if (adapter.getSelectedServiceCount() == 0) {
+            Utils.getInstance().displayAlert(getActivity(),  "","Please Select atleast One Service");
             return;
         }
         String user_id = (String) PrefManager.getInstance(getContext())
@@ -194,11 +218,8 @@ public class ServiceContainerFragment extends BaseFragment
                             resetViews();
                         }
                     });
-                    Toast.makeText(
-                        getContext(),
-                        "Your services request is generated.We will respond you shortly.",
-                        Toast.LENGTH_SHORT
-                    ).show();
+                    Utils.getInstance().displayAlert(getContext(), "",
+                            "Your services request is generated.We will respond you shortly.");
                 }
             }
         });
@@ -209,6 +230,7 @@ public class ServiceContainerFragment extends BaseFragment
         mEmailText.setText(null);*/
         adapter.resetState();
         adapter.notifyDataSetChanged();
+        invalidateSelectedText();
     }
 
     /**

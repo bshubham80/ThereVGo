@@ -90,7 +90,7 @@ public class SendSmsFragment extends BaseFragment
     private GroupTable groupTable;
     private ContactTable contactTable;
 
-    private String user_id, email, password, sender_id, sms_type;
+    private String user_id, email, password, sender_id, sms_type, msg_code;
 
 
     @Override
@@ -109,6 +109,7 @@ public class SendSmsFragment extends BaseFragment
         password = (String) prefManager.getDataFromPreference(PrefManager.Key.USER_PASSWORD, PrefManager.Type.TYPE_STRING);
         sender_id = (String) prefManager.getDataFromPreference(PrefManager.Key.USER_MSG_ID, PrefManager.Type.TYPE_STRING);
         sms_type = (String) prefManager.getDataFromPreference(PrefManager.Key.SMS_TYPE, PrefManager.Type.TYPE_STRING);
+        msg_code = (String) prefManager.getDataFromPreference(PrefManager.Key.MESSAGE_UNIQUE_CODE, PrefManager.Type.TYPE_STRING);
 
         instance = this ;
 
@@ -339,6 +340,8 @@ public class SendSmsFragment extends BaseFragment
     }
 
     private void validateForm() {
+        String url = "http://sms.therevgo.in/vendorsms/pushsms.aspx?";
+        String passwordAPI = sms_type.equals("2") ? msg_code : password;
 
         utils.hideKeyboard(context);
 
@@ -447,10 +450,10 @@ public class SendSmsFragment extends BaseFragment
 
                 Log.i("validateForm:if " + i, actucalno);
 
-
-                String URL = "http://bulksms.therevgo.com/vendorsms/pushsms.aspx?" +
+                String URL = url +
                         "user=" + email +
-                        "&password=" + password +
+                        "&api="+ msg_code +
+                        "&password=" + passwordAPI +
                         "&msisdn=" + actucalno +
                         "&sid=" + sender_id +
                         "&msg=" + messageText +
@@ -475,9 +478,10 @@ public class SendSmsFragment extends BaseFragment
                 return;
             }
 
-            String URL = "http://bulksms.therevgo.com/vendorsms/pushsms.aspx?" +
+            String URL = url +
                     "user=" + email +
-                    "&password=" +password +
+                    "&api="+ msg_code +
+                    "&password=" + passwordAPI +
                     "&msisdn=" + actucalno +
                     "&sid=" + sender_id +
                     "&msg=" + messageText +

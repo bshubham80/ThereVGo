@@ -105,6 +105,13 @@ public class ServiceGridAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public int getSelectedServiceCount() {
+        int count = 0;
+        for (boolean b : stateSelected) {
+            if (b) { count += 1; }
+        }
+        return count;
+    }
     public boolean[] getStates() {
         return stateSelected;
     }
@@ -120,9 +127,9 @@ public class ServiceGridAdapter extends BaseAdapter {
             if (stateSelected[i]) {
                 if (first) {
                     first = false;
-                    ser.append(mNameIds[i]);
+                    ser.append(mNameIds[i].replace(" ", "%20"));
                 } else {
-                    ser.append(",").append(mNameIds[i]);
+                    ser.append(",").append(mNameIds[i].replace(" ", "%20"));
                 }
             }
         }

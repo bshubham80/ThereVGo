@@ -116,7 +116,7 @@ public class ContactActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.contact_action, menu);
+        getMenuInflater().inflate(R.menu.contact_action_2, menu);
         return true;
     }
 

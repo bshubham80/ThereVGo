@@ -1,5 +1,6 @@
 package com.client.therevgo.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,23 +21,42 @@ import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.base.BaseFragment;
+import com.client.therevgo.constants.Config;
+import com.client.therevgo.dto.LoginModel;
 import com.client.therevgo.fragments.followUp.ShowFollowUpContainerFragment;
 import com.client.therevgo.fragments.inquiry.CustomerInquiry;
 import com.client.therevgo.fragments.listing.BusinessListingFragment;
 import com.client.therevgo.fragments.followUp.CreateFollowUpFragment;
 import com.client.therevgo.fragments.services.ServiceContainerFragment;
 import com.client.therevgo.fragments.sms.SmsContainerFragment;
+import com.client.therevgo.networks.HttpConnection;
+import com.client.therevgo.networks.ResponseListener;
 import com.client.therevgo.utility.PrefManager;
 import com.client.therevgo.utility.Utils;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements
-                        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, ResponseListener {
+
+    private final String[] preferenceKey = {
+            PrefManager.Key.USER_ID,
+            PrefManager.Key.USER_NAME,
+            PrefManager.Key.USER_EMAIL,
+            PrefManager.Key.USER_MOBILE,
+            PrefManager.Key.USER_MSG_ID,
+            PrefManager.Key.USER_PASSWORD,
+            PrefManager.Key.SMS_TYPE,
+            PrefManager.Key.MESSAGE_UNIQUE_CODE,
+    };
 
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private boolean doublePress;
 
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +84,21 @@ public class MainActivity extends AppCompatActivity implements
                 .getDataFromPreference(PrefManager.Key.USER_NAME, PrefManager.Type.TYPE_STRING);
         String email = (String) prefManager
                 .getDataFromPreference(PrefManager.Key.USER_EMAIL, PrefManager.Type.TYPE_STRING);
+        String password = (String) prefManager
+                .getDataFromPreference(PrefManager.Key.USER_PASSWORD, PrefManager.Type.TYPE_STRING);
 
         txt_name.setText(name);
         txt_email.setText(email);
 
         // attachFragment(BusinessListingFragment.newInstance("", ""), BusinessListingFragment.TAG);
         attachFragment(new ServiceContainerFragment(), ServiceContainerFragment.TAG);
+
+
+        String URL = Config.DOMAIN + "api/SignUp?" +
+                "emailid=" + Utils.getInstance().removeWhitSpace(email) +
+                "&password=" + password;
+
+        HttpConnection.RequestGet(URL, MainActivity.this);
     }
 
     public Toolbar getToolbar() {
@@ -230,5 +259,35 @@ public class MainActivity extends AppCompatActivity implements
 
     public FragmentManager getMyFragmentManager(){
         return fragmentManager;
+    }
+
+    @Override
+    public void onResponse(int statusCode, final JSONObject jsonObject) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
+                final LoginModel loginModel = gson.fromJson(jsonObject.toString(), LoginModel.class);
+                if (loginModel.status) {
+                    LoginModel.Data data = loginModel.Data.get(0);
+                    String[] preferenceValues = {
+                            data.id + "",
+                            data.name,
+                            data.email_id,
+                            data.mobile_no,
+                            data.msg_id,
+                            data.password,
+                            data.sms_type + "",
+                            data.mesg_unq_code
+                    };
+                    PrefManager.getInstance(MainActivity.this).setDataInPreference(preferenceKey, preferenceValues);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onError(String msg) {
+
     }
 }
