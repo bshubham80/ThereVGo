@@ -52,10 +52,6 @@ import com.client.therevgo.utility.PrefManager;
 import com.client.therevgo.utility.Utils;
 import com.google.gson.Gson;
 
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.ContentBody;
-import org.apache.http.entity.mime.content.FileBody;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -79,8 +75,8 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
     public static final int REQUEST_IMAGE_CAPTURE = 0;
     public static final int REQUEST_IMAGE_GALLERY = 1;
     public static final String URL_SUFFIX = "http://www.therevgo.in/product_img/";
-    static final int REQUEST_CAMERA = 0;
-    static final int REQUEST_GALLERY = 1;
+    static final int REQUEST_CAMERA = 3;
+    static final int REQUEST_GALLERY = 4;
     public int con_id, image_id = -1;
     private Button btn_upload;
     private Button btn_submit, btn_update;
@@ -178,10 +174,10 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
         user_id = (String) PrefManager.getInstance(context).getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
 
-        logo = (ImageView) view.findViewById(R.id.logo);
-        btn_upload = (Button) view.findViewById(R.id.btn_upload);
-        btn_submit = (Button) view.findViewById(R.id.btn_submit);
-        btn_update = (Button) view.findViewById(R.id.btn_update);
+        logo = view.findViewById(R.id.logo);
+        btn_upload = view.findViewById(R.id.btn_upload);
+        btn_submit = view.findViewById(R.id.btn_submit);
+        btn_update = view.findViewById(R.id.btn_update);
 
         btn_submit.setOnClickListener(new MyClickListener());
         btn_update.setOnClickListener(new MyClickListener());
@@ -339,10 +335,8 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
                 switch (position) {
                     case 0:
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (context.checkSelfPermission(Manifest.permission.CAMERA) !=
-                                    PackageManager.PERMISSION_GRANTED) {
-                                requestPermissions(new String[]{Manifest.permission.CAMERA}
-                                        , REQUEST_CAMERA);
+                            if (context.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(new String[] { Manifest.permission.CAMERA }, REQUEST_CAMERA);
                             } else {
                                 startCameraOperation();
                             }
@@ -372,7 +366,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
 
     private void startCameraOperation() {
         try {
-            File photoFile = createImageFile(getActivity());
+            File photoFile = createImageFile((Activity) getContext());
             // Save a file: path for use with ACTION_VIEW intents
             mCurrentPhotoPath = photoFile.getAbsolutePath();
 
@@ -457,7 +451,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         //Cursor cursor = activity.getContentResolver().query(imageUri, filePathColumn, null, null, null);
         Cursor imageCursor = null;
-        String str[] = imageUri.getLastPathSegment().split(":");
+        String[] str = imageUri.getLastPathSegment().split(":");
         if (str.length >= 2) {
             imageCursor = activity.getContentResolver()
                     .query(getUri(), filePathColumn, MediaStore.Images.Media._ID + "=" + str[str.length - 1], null, null);
@@ -553,7 +547,7 @@ public class BusinessLogoFragment extends Fragment implements ResponseListener {
         if (uploadableFile == null) {
             utils.displayAlert(context, res.getString(R.string.error), "Please select valid photo");
             dialog.cancel();
-            return ;
+            return;
         }
 
         new Thread(new Runnable() {
