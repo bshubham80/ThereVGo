@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.client.therevgo.customviews.CustomEditText
+            <com.client.therevgo.services.customviews.CustomEditText
                 android:id="@+id/et_sms_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,7 +38,7 @@
                 tools:targetApi="lollipop" />
 
 
-            <com.client.therevgo.customviews.CustomButton
+            <com.client.therevgo.services.customviews.CustomButton
                 android:id="@+id/btn_send_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
@@ -70,7 +70,7 @@
         android:layout_below="@+id/saved_sms"
         android:dividerHeight="1dp" />
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

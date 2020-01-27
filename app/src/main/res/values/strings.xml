@@ -93,4 +93,10 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <plurals name="select_service">
+        <item quantity="zero">Select Services</item>
+        <item quantity="one">1 Service Selected</item>
+        <item quantity="other">%d Services Selected</item>
+    </plurals>
+
 </resources>

@@ -6,7 +6,7 @@
     android:gravity="center"
     tools:context="com.android.therevgo.com.client.therevgo.activities.IntroSlider$PlaceholderFragment">
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:scaleType="fitXY"/>
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"

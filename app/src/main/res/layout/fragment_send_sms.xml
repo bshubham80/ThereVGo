@@ -43,7 +43,7 @@
             android:padding="@dimen/activity_horizontal_margin"
             tools:context="com.business.thereVgo.client.SendSms">
 
-            <com.client.therevgo.customviews.CustomTextView
+            <com.client.therevgo.services.customviews.CustomTextView
                 android:id="@+id/total_balance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <com.client.therevgo.customviews.CustomTextView
+            <com.client.therevgo.services.customviews.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_card_margin"
@@ -61,7 +61,7 @@
                 android:textSize="12sp" />
 
 
-            <com.client.therevgo.customviews.CustomTextView
+            <com.client.therevgo.services.customviews.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_card_margin"
@@ -87,7 +87,7 @@
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.client.therevgo.customviews.CustomTextView
+                <com.client.therevgo.services.customviews.CustomTextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -102,7 +102,7 @@
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
 
-                    <com.client.therevgo.customviews.CustomEditText
+                    <com.client.therevgo.services.customviews.CustomEditText
                         android:id="@+id/et_sms_no"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
                 android:visibility="gone"
                 android:orientation="vertical">
 
-                <com.client.therevgo.customviews.CustomTextView
+                <com.client.therevgo.services.customviews.CustomTextView
                     android:id="@+id/select_group"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -163,7 +163,7 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
-                <com.client.therevgo.customviews.CustomTextView
+                <com.client.therevgo.services.customviews.CustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="5dp"
@@ -171,7 +171,7 @@
                     android:text="@string/message"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                <com.client.therevgo.customviews.CustomEditText
+                <com.client.therevgo.services.customviews.CustomEditText
                     android:id="@+id/et_sms_message"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -198,7 +198,7 @@
                     android:layout_weight="0.7"
                     android:text="I agree to save my sms" />
 
-                <com.client.therevgo.customviews.CustomButton
+                <com.client.therevgo.services.customviews.CustomButton
                     android:id="@+id/btn_send_msg"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

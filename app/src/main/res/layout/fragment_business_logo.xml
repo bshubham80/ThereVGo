@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
 
-        <com.client.therevgo.customviews.CustomButton
+        <com.client.therevgo.services.customviews.CustomButton
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_marginBottom="@dimen/mini_padding"
             android:text="@string/submit"/>
 
-        <com.client.therevgo.customviews.CustomButton
+        <com.client.therevgo.services.customviews.CustomButton
             android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

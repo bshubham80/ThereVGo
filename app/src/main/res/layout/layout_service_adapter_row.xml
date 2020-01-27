@@ -15,7 +15,7 @@
         app:srcCompat="@mipmap/ic_launcher"
         android:contentDescription="@string/icon_description" />
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:id="@+id/txt_service_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:paddingTop="@dimen/activity_horizontal_margin"
         android:text="TextView" />
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:id="@+id/txt_service_live"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

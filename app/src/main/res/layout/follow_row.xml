@@ -9,7 +9,7 @@
     android:layout_height="wrap_content"
     tools:targetApi="lollipop">
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.client.therevgo.customviews.CustomTextView
+        <com.client.therevgo.services.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -33,7 +33,7 @@
             android:layout_gravity="center_horizontal" />
 
 
-        <com.client.therevgo.customviews.CustomTextView
+        <com.client.therevgo.services.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -49,7 +49,7 @@
 
     </LinearLayout>
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.client.therevgo.customviews.CustomTextView
+        <com.client.therevgo.services.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -70,7 +70,7 @@
             android:layout_gravity="center_horizontal" />
 
 
-        <com.client.therevgo.customviews.CustomTextView
+        <com.client.therevgo.services.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -78,7 +78,7 @@
             android:layout_weight="1"
             android:gravity="right" />
 
-        <com.client.therevgo.customviews.CustomTextView
+        <com.client.therevgo.services.customviews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"

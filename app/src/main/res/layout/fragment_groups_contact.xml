@@ -27,7 +27,7 @@
         android:textColor="@color/bg_screen2"
         android:text="@string/add" />
 
-    <com.client.therevgo.customviews.RecyclerViewWithEmptyView
+    <com.client.therevgo.services.customviews.RecyclerViewWithEmptyView
         android:id="@+id/group_contacts_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +38,7 @@
         android:name="com.android.therevgo.fragments.group.GroupsContactFragment"
         tools:listitem="@layout/contact_info"/>
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:id="@+id/contact_list_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

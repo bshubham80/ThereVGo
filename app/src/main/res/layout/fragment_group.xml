@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:dividerHeight="1dp"/>
 
-    <com.client.therevgo.customviews.CustomTextView
+    <com.client.therevgo.services.customviews.CustomTextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

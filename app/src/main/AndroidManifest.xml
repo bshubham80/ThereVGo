@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo"
@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name="com.client.therevgo.activities.IntroSlider"
+            android:name="com.client.therevgo.services.activities.IntroSlider"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -30,30 +30,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.client.therevgo.activities.MainActivity"
+            android:name="com.client.therevgo.services.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"
             />
         <activity
-            android:name="com.client.therevgo.activities.LoginActivity"
+            android:name="com.client.therevgo.services.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.client.therevgo.activities.SignUpActivity"
+            android:name="com.client.therevgo.services.activities.SignUpActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.client.therevgo.activities.ContactActivity"
+            android:name="com.client.therevgo.services.activities.ContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.client.therevgo.activities.ContainerActivity"
+            android:name="com.client.therevgo.services.activities.ContainerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.client.therevgo.activities.HomeActivity"
+            android:name="com.client.therevgo.services.activities.HomeActivity"
             android:label="@string/title_activity_home"/>
     </application>
 
