@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.services.dto.SelectUser;
@@ -94,9 +95,11 @@ public class SelectUserAdapter extends BaseAdapter {
 
                 if(((CheckBox)v).isChecked()) {
                     setSelectedItem(pos);
+                    showCountToast();
                 }
                 else {
                     removeSelectedItem(pos);
+                    showCountToast();
                 }
             }
         });
@@ -112,6 +115,16 @@ public class SelectUserAdapter extends BaseAdapter {
         return view;
     }
 
+    public void showCountToast() {
+        int count = getCheckedItems().size();
+        String msg ;
+        if (count <= 1) {
+             msg = String.format(Locale.ENGLISH,"%d number selected", count);
+        } else {
+             msg = String.format(Locale.ENGLISH,"%d numbers selected", count);
+        }
+        Toast.makeText(_c, msg, Toast.LENGTH_SHORT).show();
+    }
     public void setSelectedItem(int postion) {
         String number = _data.get(postion).getPhone();
         String name = _data.get(postion).getName();

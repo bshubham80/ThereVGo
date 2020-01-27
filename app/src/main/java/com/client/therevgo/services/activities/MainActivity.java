@@ -20,56 +20,85 @@ import android.widget.Toast;
 
 import com.android.therevgo.R;
 import com.client.therevgo.services.base.BaseFragment;
+import com.client.therevgo.services.constants.Config;
+import com.client.therevgo.services.dto.LoginModel;
+import com.client.therevgo.services.fragments.followUp.CreateFollowUpFragment;
 import com.client.therevgo.services.fragments.followUp.ShowFollowUpContainerFragment;
 import com.client.therevgo.services.fragments.inquiry.CustomerInquiry;
 import com.client.therevgo.services.fragments.listing.BusinessListingFragment;
-import com.client.therevgo.services.fragments.followUp.CreateFollowUpFragment;
 import com.client.therevgo.services.fragments.services.ServiceContainerFragment;
 import com.client.therevgo.services.fragments.sms.SmsContainerFragment;
+import com.client.therevgo.services.networks.HttpConnection;
+import com.client.therevgo.services.networks.ResponseListener;
 import com.client.therevgo.services.utility.PrefManager;
 import com.client.therevgo.services.utility.Utils;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements
-                        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, ResponseListener {
+
+    private final String[] preferenceKey = {
+            PrefManager.Key.USER_ID,
+            PrefManager.Key.USER_NAME,
+            PrefManager.Key.USER_EMAIL,
+            PrefManager.Key.USER_MOBILE,
+            PrefManager.Key.USER_MSG_ID,
+            PrefManager.Key.USER_PASSWORD,
+            PrefManager.Key.SMS_TYPE,
+            PrefManager.Key.MESSAGE_UNIQUE_CODE,
+    };
 
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private boolean doublePress;
 
+    private Handler handler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         PrefManager prefManager = PrefManager.getInstance(this);
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView txt_name = (TextView) headerView.findViewById(R.id.txt_header_person_name);
-        TextView txt_email = (TextView) headerView.findViewById(R.id.txt_header_person_email);
+        TextView txt_name = headerView.findViewById(R.id.txt_header_person_name);
+        TextView txt_email = headerView.findViewById(R.id.txt_header_person_email);
 
         String name = (String) prefManager
                 .getDataFromPreference(PrefManager.Key.USER_NAME, PrefManager.Type.TYPE_STRING);
         String email = (String) prefManager
                 .getDataFromPreference(PrefManager.Key.USER_EMAIL, PrefManager.Type.TYPE_STRING);
+        String password = (String) prefManager
+                .getDataFromPreference(PrefManager.Key.USER_PASSWORD, PrefManager.Type.TYPE_STRING);
 
         txt_name.setText(name);
         txt_email.setText(email);
 
         // attachFragment(BusinessListingFragment.newInstance("", ""), BusinessListingFragment.TAG);
         attachFragment(new ServiceContainerFragment(), ServiceContainerFragment.TAG);
+
+
+        String URL = Config.DOMAIN + "api/SignUp?" +
+                "emailid=" + Utils.getInstance().removeWhitSpace(email) +
+                "&password=" + password;
+
+        HttpConnection.RequestGet(URL, MainActivity.this);
     }
 
     public Toolbar getToolbar() {
@@ -128,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } else if ( id == R.id.action_create) {
+        } else if (id == R.id.action_create) {
             return false;
         }
 
@@ -159,13 +188,11 @@ public class MainActivity extends AppCompatActivity implements
             fragment = new SmsContainerFragment();
             backStack = SmsContainerFragment.TAG;
 
-        }
-        else if (id == R.id.nav_services) {
+        } else if (id == R.id.nav_services) {
             fragment = BusinessListingFragment.newInstance("", "");
             backStack = BusinessListingFragment.TAG;
 
-        }
-        else if (id == R.id.nav_call) {
+        } else if (id == R.id.nav_call) {
             Utils.getInstance().makeCall(this);
 
         } else if (id == R.id.nav_aboutus) {
@@ -209,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements
 //            setTitle(fragment.getTitle());
 //            // getSupportActionBar().setTitle(fragment.getTitle());
 //        }
-        if (fragmentManager.getBackStackEntryCount() > 1){
+        if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStack();
         }
         transaction.addToBackStack(backStackEntry);
@@ -228,7 +255,37 @@ public class MainActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    public FragmentManager getMyFragmentManager(){
+    public FragmentManager getMyFragmentManager() {
         return fragmentManager;
+    }
+
+    @Override
+    public void onResponse(int statusCode, final JSONObject jsonObject) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Gson gson = new Gson();
+                final LoginModel loginModel = gson.fromJson(jsonObject.toString(), LoginModel.class);
+                if (loginModel.status) {
+                    LoginModel.Data data = loginModel.Data.get(0);
+                    String[] preferenceValues = {
+                            data.id + "",
+                            data.name,
+                            data.email_id,
+                            data.mobile_no,
+                            data.msg_id,
+                            data.password,
+                            data.sms_type + "",
+                            data.mesg_unq_code
+                    };
+                    PrefManager.getInstance(MainActivity.this).setDataInPreference(preferenceKey, preferenceValues);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onError(String msg) {
+
     }
 }

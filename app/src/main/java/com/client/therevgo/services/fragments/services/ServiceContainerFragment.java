@@ -169,6 +169,10 @@ public class ServiceContainerFragment extends BaseFragment
         if (!utils.validateEmail(getActivity(), mEmailText, "Enter a valid Email id")) {
             return;
         }
+        if (adapter.getSelectedServiceCount() == 0) {
+            Utils.getInstance().displayAlert(getActivity(),  "","Please Select atleast One Service");
+            return;
+        }
         String user_id = (String) PrefManager.getInstance(getContext())
                 .getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
 
@@ -222,6 +226,7 @@ public class ServiceContainerFragment extends BaseFragment
         mEmailText.setText(null);*/
         adapter.resetState();
         adapter.notifyDataSetChanged();
+        invalidateSelectedText();
     }
 
     /**

@@ -14,6 +14,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
+        android:focusable="false"
+        android:clickable="false"
         android:textColor="@android:color/holo_orange_dark"
         android:id="@+id/follow_name" />
 
@@ -27,6 +29,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
+            android:focusable="false"
+            android:clickable="false"
             android:textColor="@android:color/holo_blue_dark"
             android:id="@+id/follow_email"
             android:layout_weight="1.5"
@@ -42,6 +46,7 @@
             android:id="@+id/follow_phone"
             android:drawableStart="@drawable/ic_call"
             android:drawableLeft="@drawable/ic_call"
+            android:focusable="false"
             android:drawablePadding="2dp"
             android:text="9138916815"
             android:layout_weight="2"
@@ -67,6 +72,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/follow_date"
             android:layout_weight="1"
+            android:focusable="false"
+            android:clickable="false"
             android:layout_gravity="center_horizontal" />
 
 
@@ -75,6 +82,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/follow_area"
+            android:focusable="false"
+            android:clickable="false"
             android:layout_weight="1"
             android:gravity="right" />
 
@@ -83,6 +92,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/follow_city"
+            android:focusable="false"
+            android:clickable="false"
             android:layout_weight="1"
             android:gravity="right"/>
 

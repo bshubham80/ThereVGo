@@ -124,7 +124,7 @@ public class ContactActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // I do not want this...
-                // Home as up button is to navigate to Home-Activity not previous acitivity
+                // Home as up button is to navigate to Home-Activity not previous activity
                 HashMap<String, String> phoneMap = adapter.getCheckedItems();
                 mListener.onContactListFound(ContactActivity.this, phoneMap);
                 Log.i("Size", "onOptionsItemSelected: "+phoneMap.size());
@@ -135,6 +135,7 @@ public class ContactActivity extends AppCompatActivity {
                 for (int i = 0; i <= adapter.getCount()-1 ; i++) {
                     adapter.setSelectedItem(i);
                 }
+                adapter.showCountToast();
                 return true;
         }
         return super.onOptionsItemSelected(item);

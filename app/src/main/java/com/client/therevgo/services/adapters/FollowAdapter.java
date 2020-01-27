@@ -121,6 +121,7 @@ public class FollowAdapter extends ArrayAdapter<FollowModel> implements View.OnC
                 Log.i(TAG, "onClick: ");
                 String contact = (String) v.getTag();
                 Utils.getInstance().makeCall(context, contact);
+                v.setFocusable(false);
                 break;
         }
     }

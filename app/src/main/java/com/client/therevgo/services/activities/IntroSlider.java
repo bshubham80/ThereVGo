@@ -268,8 +268,16 @@ public class IntroSlider extends Activity {
     }
 
     private void launchHomeScreen() {
-        prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        String user_id = (String)
+                prefManager.getDataFromPreference(PrefManager.Key.USER_ID, PrefManager.Type.TYPE_STRING);
+        if (!user_id.equals(PrefManager.DEFAULT_STRING) && user_id.length() > 0) {
+            Intent intent = new Intent(this, MainActivity.class);//DashBoard.class);
+            startActivity(intent);
+            finish();
+        } else {
+            prefManager.setFirstTimeLaunch(false);
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
     }
 }

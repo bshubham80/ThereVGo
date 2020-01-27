@@ -122,7 +122,7 @@ public class SmsContainerFragment extends BaseFragment {
 
                 case R.id.business_lead_card:
                     //Toast.makeText(context, "Delivery Report will coming soon", Toast.LENGTH_SHORT).show();
-                    attachWebViewFragment("Delivery Report", "http://bulksms.therevgo.com");
+                    attachWebViewFragment("Delivery Report", "http://sms.therevgo.in");
                     break;
 
                 case R.id.plan_card:

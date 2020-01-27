@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -99,6 +100,7 @@ public class CustomDateFilterFollowUpFragment extends Fragment implements Respon
         followList.setSelectionAfterHeaderView();
         followList.addHeaderView(header);
 
+
         followList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
             @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -153,6 +155,15 @@ public class CustomDateFilterFollowUpFragment extends Fragment implements Respon
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 resetAdapter();
+            }
+        });
+
+        followList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                followList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+                return true;
             }
         });
 

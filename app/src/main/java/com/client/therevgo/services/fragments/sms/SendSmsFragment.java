@@ -339,6 +339,8 @@ public class SendSmsFragment extends BaseFragment
     }
 
     private void validateForm() {
+        String url = "http://sms.therevgo.in/vendorsms/pushsms.aspx?";
+        String passwordAPI = sms_type.equals("2") ? msg_code : password;
 
         utils.hideKeyboard(context);
 
@@ -447,11 +449,10 @@ public class SendSmsFragment extends BaseFragment
 
                 Log.i("validateForm:if " + i, actucalno);
 
-
-                String URL = "http://bulksms.therevgo.com/vendorsms/pushsms.aspx?" +
+                String URL = url +
                         "user=" + email +
                         "&api="+ msg_code +
-                        "&password=" + password +
+                        "&password=" + passwordAPI +
                         "&msisdn=" + actucalno +
                         "&sid=" + sender_id +
                         "&msg=" + messageText +
@@ -476,10 +477,10 @@ public class SendSmsFragment extends BaseFragment
                 return;
             }
 
-            String URL = "http://bulksms.therevgo.com/vendorsms/pushsms.aspx?" +
+            String URL = url +
                     "user=" + email +
                     "&api="+ msg_code +
-                    "&password=" +password +
+                    "&password=" + passwordAPI +
                     "&msisdn=" + actucalno +
                     "&sid=" + sender_id +
                     "&msg=" + messageText +
